@@ -1,0 +1,714 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    background: #f7f7f7;
+    height: 100%;
+}
+
+.pagecontent {
+    min-height: -webkit-calc(100% - 200px);
+    /* Chrome */
+    min-height: -moz-calc(100% - 200px);
+    /* Firefox */
+    min-height: calc(100% - 200px);
+    /* native */
+}
+
+.section {
+    width: 100%;
+    min-width: 480px;
+}
+
+.container {
+    position: relative;
+    width: 1170px;
+    margin: 0 auto;
+    color: #444;
+    font-size: 14px;
+    font-weight: 300;
+    overflow: hidden;
+}
+
+.section .container {
+    padding: 20px 0 20px 0;
+}
+
+.section.bg, .section.signupform {
+    background: #f7f7f7;
+}
+
+
+/* --------------------------------  Header  -------------------------------- */
+
+.header-container {
+    height: 80px;
+}
+
+.header {
+    line-height: 80px;
+    width: 100%;
+    transition: line-height 0.2s linear, box-shadow 0.2s linear;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background: rgba(247, 247, 247, 0.95);
+    box-shadow: 0px 1px 1px #666;
+    min-width: 480px;
+}
+
+#logo {
+    position: absolute;
+    float: left;
+    clear: left;
+    height: 80px;
+    width: 170px;
+    cursor: pointer;
+}
+
+#logo .imgholder {
+    height: 80px;
+    width: 100%;
+}
+
+.img {
+    height: 100%;
+    width: 100%;
+}
+
+ul.nav {
+    float: right;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.nav li {
+    float: left;
+    position: relative;
+}
+
+ul.nav li a {
+    transition: color 0.2s linear;
+    font-size: 18px;
+    padding: 20px;
+    color: initial;
+    text-decoration: initial;
+}
+
+
+/* Change text color when hovering over it */
+
+ul.nav li:hover a {
+    color: #2ecc71;
+}
+
+
+/* --------------------------------- sign-up option ------------------------------- */
+
+
+/* Form nput fields */
+
+input[type=text], input[type=password], input[type=email], input[list=Suburbs] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    min-width: 200px;
+}
+
+input[type=number], input[type=date]{
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    margin-right: 80%;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    min-width: 200px;
+}
+
+
+/* Style for all buttons */
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.radiobtn {
+    margin-right: 40%;
+    padding: 10px 20px;
+    margin-right: 20%;
+    box-sizing: border-box;
+}
+
+
+/* Style of front page buttons */
+
+.signinopt, .loginopt {
+    margin: 5px;
+}
+
+
+/* Form buttons */
+
+.signupbtn, .loginbtn {
+    float: right;
+    width: 48%;
+    min-width: 100px;
+    clear: right;
+}
+
+
+/* Form content settings */
+
+.signform-container {
+    background-color: #f7f7f7;
+    /* 5% from the top, 15% from the bottom and centered */
+    width: 60%;
+    min-width: 250px;
+    margin-left: 20%;
+    margin-bottom: 5%;
+}
+
+
+/* Form padding */
+
+.signform-content {
+    padding: 16px;
+    background: #f7f7f7;
+}
+
+
+/* Clear floats */
+
+.buttons-content::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+/* -----------------------------------  login  ------------------------------------ */
+
+
+/* Form content settings */
+
+.loginform-container {
+    background-color: #f7f7f7;
+    width: 60%;
+    min-width: 250px;
+    margin-left: 20%;
+    margin-bottom: 13%;
+    margin-top: 4%;
+}
+
+
+/* Form padding */
+
+.loginform-content {
+    padding: 16px;
+    background: #f7f7f7;
+}
+
+
+/* ------------------  Search and large park background  -------------------- */
+
+.section .parkbg {
+    background: #2ecc71;
+    background-image: url(images/backgroundOne.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    min-width: 480px;
+}
+
+.parksearchcontent {
+    text-align: center;
+    height: 300px;
+}
+
+
+/* ------------------  Search box characteristics -------------------- */
+
+@import "compass/css3";
+.flexsearch--wrapper {
+    height: auto;
+    width: 500px;
+    max-width: 100%;
+    overflow: hidden;
+    background: transparent;
+    position: static;
+}
+
+.flexsearch--form {
+    overflow: hidden;
+    position: relative;
+}
+
+.flexsearch--input-wrapper {
+    padding: 0 66px 0 0;
+    /* Right padding for submit button width */
+    overflow: hidden;
+}
+
+.flexsearch--input {
+    width: 100%;
+}
+
+
+/***********************
+ * Configurable Styles *
+ ***********************/
+
+.flexsearch {
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 75px;
+    /* Padding for other horizontal elements */
+}
+
+.flexsearch--input {
+    opacity: 0.8;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 60px;
+    padding: 0 46px 0 10px;
+    border-color: #888;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 2px;
+    margin-top: 15px;
+    color: #333;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 26px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.flexsearch--submit {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border: none;
+    margin-top: 20px;
+    /* margin-top + border-width */
+    margin-right: 5px;
+    /* border-width */
+    background: transparent;
+    color: #888;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 40px;
+    line-height: 60px;
+}
+
+.flexsearch--input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.flexsearch--input:focus.flexsearch--submit {
+    color: #333;
+}
+
+.flexsearch--submit:hover {
+    color: #333;
+    cursor: pointer;
+}
+
+::-webkit-input-placeholder {
+    color: #888;
+}
+
+input:-moz-placeholder {
+    color: #888;
+}
+
+
+/* ----------------------------- Dropdown menu ------------------------------ */
+
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    float: right;
+    margin-top: 20px;
+
+
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+
+/* --------------------- Parks pannels characteristics ---------------------- */
+
+.col {
+    float: left;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+.col.four {
+    width: 23%;
+    margin: 0 1%;
+}
+
+.col.three {
+    width: 31.3%;
+    margin: 0 1%;
+}
+
+.col.two {
+    width: 40%;
+    margin: 0 2.5%;
+    padding: 0 2.5%;
+}
+
+.col .feature {
+    font-size: 21px;
+    font-weight: 300;
+}
+
+.col .feature {
+    font-size: 19px;
+}
+
+
+/* ----------------------- Specifics Panels features ------------------------ */
+
+.col p, .col h1 {
+    padding: 0 1%;
+    text-align: center;
+}
+
+.group.margin {
+    margin-bottom: 20px;
+}
+
+.col .imgholder {
+    height: 300px;
+    width: 100%;
+    background: #2ecc71;
+    transition: background 0.3s linear;
+}
+
+.col.bg {
+    background: #FFF;
+}
+
+.col.pointer {
+    cursor: pointer;
+}
+
+.col.bg:hover .imgholder {
+    background: rgba(247, 247, 247, 0.95);
+}
+
+.col span.feature {
+    font-size: 20px;
+}
+
+.parkImg {
+    height: 100%;
+    width: 100%;
+}
+
+
+/* ------------------------------ Headings ---------------------------------- */
+
+.container>h1 {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.container>h1:after {
+    content: "";
+    width: 30px;
+    position: relative;
+    border-bottom: 1px solid #aaa;
+    display: block;
+    text-align: center;
+    margin: auto;
+    margin-top: 15px;
+}
+
+h2 {
+    text-align: center;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.left, .left>h1, .left>p {
+    text-align: left;
+}
+
+
+/* ----------------------------- Home page Map ------------------------------ */
+
+#GoogleMap .homeMap {
+    width: 100%;
+    height: 400px;
+}
+
+
+/* --------------------------- Results page Map ----------------------------- */
+
+.resultMap {
+  width: 70%;
+  height: 100%;
+}
+
+
+
+/* -------------------- Footer font set all to white ------------------------ */
+
+.white h1, .white h2, .white p, .white div, .white a {
+    color: #fff;
+}
+
+.section .footer {
+    background: #2ecc71;
+    bottom: 0;
+    width: 100%;
+    position: relative;
+}
+
+#aboutUs .section .footer {
+    background: #2ecc71;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+}
+
+
+/* ---------------------------- Responsive ---------------------------------- */
+
+.group:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media all and (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+    .header-container {
+        height: 172px;
+    }
+    .col.four {
+        width: 48%;
+        margin: 1%;
+    }
+    .col.three {
+        display: block;
+        width: 95%;
+        padding: 0;
+        margin: 0 auto;
+        float: none;
+    }
+    .header {
+        height: auto;
+        background: #eee;
+    }
+    #logo {
+        position: initial;
+        float: none;
+        display: block;
+        transform: none;
+        margin: 10px auto 0 auto;
+    }
+    ul.nav {
+        float: none;
+        display: block;
+        text-align: center;
+        margin: 0 auto;
+    }
+    ul.nav li {
+        float: initial;
+        display: inline-block;
+    }
+    .responsivegroup {
+        display: block;
+    }
+    .responsivegroup:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@media all and (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+
+@media all and (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+
+@media all and (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+}
+
+@media all and (max-width:664px) {
+    .col, .col.four, .col.three {
+        display: block;
+        width: 95%;
+        padding: 0;
+        margin: 0 auto;
+        float: none;
+    }
+    .group {
+        display: none;
+    }
+    .header-container {
+        height: 252px;
+    }
+}
+
+
+/* --------------------  Map Container Styling  ----------------------------- */
+
+.containerMap {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin: 7 auto;
+    color: #444;
+    font-size: 14px;
+    font-weight: 300;
+    overflow: hidden;
+    height: 500px;
+}
+
+
+/* ----------------------- 5 Star Rating System ------------------------ */
+
+.acidjs-rating-stars, .acidjs-rating-stars label::before {
+    display: inline-block;
+}
+
+.acidjs-rating-stars label:hover, .acidjs-rating-stars label:hover~label {
+    color: #189800;
+}
+
+.acidjs-rating-stars * {
+    float: right;
+    margin: 0;
+    padding: 1px;
+}
+
+.acidjs-rating-stars input {
+    display: none;
+}
+
+.acidjs-rating-stars {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+.acidjs-rating-stars label {
+    color: #ccc;
+}
+
+.acidjs-rating-stars label::before {
+    content: "\2605";
+    width: 35px;
+    line-height: 18px;
+    text-align: center;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.acidjs-rating-stars input:checked~label {
+    color: #f5b301;
+}
+
+.acidjs-rating-disabled {
+    opacity: .50;
+    -webkit-pointer-events: none;
+    -moz-pointer-events: none;
+    pointer-events: none;
+}
+
+
+/* ----------------------- Review Box ------------------------ */
+
+#logo .reviewHolder {
+    height: 80px;
+    width: 100%;
+}
+
+reviewHolder {
+    height: 300px;
+    width: 100%;
+    background: #2ecc71;
+    transition: background 0.3s linear;
+    clear: both;
+    float: left;
+}
+
+.col.backGround {
+    background: #2ecc71;
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px #888888;
+    text-indent: 10px;
+}
+
+
+/* ----------------------- About Us ------------------------ */
+
+.aboutUs {
+    text-align: center;
+}
