@@ -19,18 +19,26 @@
 
 
 	<div class="pagecontent">
-		<!-- Signup -->
+		<!--  Signup -->
 		<div class="section signupform">
-			<form class="signform-container">
-				<div class="signform-content">
 					<?php
 					$errors = array();
 					require 'validate.php';
-					include 'form.php';
+					if (isset($_POST['signup'])) {
+						validateName($errors, $_POST, 'name');
+						validateEmail($errors, $_POST, 'email');
+						validateAge($errors, $_POST, 'age');
+						validateDate($errors, $_POST, 'date');
+						validatePass($errors, $_POST, 'pass');
+						if ($errors) {
+							include 'form.php';
+						} else {
+							echo 'form submitted successfully with no errors';
+						}
+					} else {
+						include 'form.php';
+					}
 					?>
-				</div>
-			</form>
-
 		</div>
 	</div>
 

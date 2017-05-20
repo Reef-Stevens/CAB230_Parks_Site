@@ -4,7 +4,7 @@ function input_field($errors, $name, $label, $holder) {
   echo '<div class="required_field">';
   label($name, $label);
   $value = posted_value($name);
-  if ($name = "pass") {
+  if ($name == "pass") {
       echo "<input type=\"password\" id=\"$name\" placeholder=\"$holder\" name=\"$name\" value=\"$value\"/>";
   } else {
       echo "<input type=\"text\" id=\"$name\" placeholder=\"$holder\" name=\"$name\" value=\"$value\"/>";
@@ -26,8 +26,13 @@ function posted_value($name) {
 
 function errorLabel($errors, $name) {
   if (isset($errors[$name])) {
-    return $errors[$name];
+      foreach ($errors as $field => $error) {
+          if ($field == $name) {
+              echo "<span> $error </span>";
+          }
+      }
   }
 }
+
 
 ?>

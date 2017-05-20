@@ -1,20 +1,18 @@
-<form name="myForm" action="login.php" method="post">
-        <?php
-        require 'construct.php';
 
-        input_field($errors, 'name', 'Username', 'Enter First Name');
-        input_field($errors, 'email', 'Email', 'Enter Email');
+<form class="signform-container" name="myForm" action="signup.php" method="post">
+    <div class="signform-content">
+            <?php
+            require 'construct.php';
 
-        label('age', 'Age');
-        echo '<input type="number" min="18" max="99" placeholder="Example: 21" required>';
+            input_field($errors, 'name', 'Username', 'Enter First Name');
+            input_field($errors, 'email', 'Email', 'Enter Email');
+            input_field($errors, 'age', 'Age', 'Enter age');
+            input_field($errors, 'date', 'Birthday', 'DD/MM/YYYY');
+            input_field($errors, 'pass', 'Password', 'Enter Password');
+            ?>
 
-        label('birth', 'Birthday');
-        echo '<input type="date" placeholder="DD/MM/YYYY" pattern="[0-9-/]+" id="myDate" required>';
-
-        input_field($errors, 'pass', 'Password', 'Enter Password');
-        ?>
-
-    <div class="buttons-container">
-        <button type="submit" class="signupbtn">Sign Up</button>
+        <div class="buttons-container">
+            <button type="submit" name="signup" value="yes" class="signupbtn">Sign Up</button>
+        </div>
     </div>
 </form>
