@@ -53,3 +53,7 @@ src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA4ecW0bx03nOIZZa8r394XP
 function searchNow() {
     window.location.href = 'resultsPage.html';
 }
+
+function user_location_link(){
+    navigator.geolocation.getCurrentPosition(location_callback);
+}

@@ -7,7 +7,7 @@
 		<meta name="description" content="Website to search for parks" />
 		<meta charset="UTF-8" />
 		<link href="style/style.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="scripts.js"></script>
+		<script type="text/javascript" src="script/scripts.js"></script>
 </head>
 
 

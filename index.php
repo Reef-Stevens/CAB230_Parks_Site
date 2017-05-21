@@ -12,42 +12,8 @@ require "header.php";
             <div class="parkbg">
                 <div class="container parksearchcontent">
                     <div class="flexsearch">
-                      <!--      Dropdown Menu Stuff        -->
-                      <div class="dropdown">
-                          <button class="dropbtn">&#8595;</button>
-                          <div class="dropdown-content">
-                            <a href="individualPageOne.php">By Rating</a>
-                            <a href="individualPageTwo.php">By Suburb</a>
-                            <a href="individualPageThree.php">By Name</a>
-                          </div>
-                      </div>
                         <div class="flexsearch--wrapper">
-                            <form class="flexsearch--form" action="results.php" method="post">
-                                <div class="flexsearch--input-wrapper">
-                                    <input class="flexsearch--input" type="text" placeholder="Search...">
-                                </div>
-
-                                <input class="flexsearch--submit" type="submit" value="&#10140;" />
-                            </form>
-
-                            <?php
-                            include('createdb.inc');
-
-                            if (isset($_POST['parkNameSearch'])) {
-
-                            // Users search terms is saved in $_POST['q']
-                            $q = $_POST['parkNameSearch'];
-                            // Prepare statement
-                            $search = $pdo->prepare("SELECT Name  FROM dataset WHERE Name LIKE ?");
-                            // Execute with wildcards
-                            $search->execute(array("%$q%"));
-                            // Echo results
-                            foreach($search as $s) {
-                              echo $s['Name'];
-                            }
-                            }
-                            ?>
-
+                          <button onclick="window.location.href='search.php'" class="loginopt">Search</button>
                         </div>
                     </div>
                 </div>
