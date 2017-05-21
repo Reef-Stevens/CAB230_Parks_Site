@@ -2,7 +2,7 @@
     <div class="loginform-content">
         <?php
         require 'construct.php';
-
+        $errors = array();
         input_field($errors, 'email', 'Email', 'Enter Email');
         input_field($errors, 'pass', 'Password', 'Enter Password');
         ?>
