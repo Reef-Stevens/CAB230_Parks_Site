@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-	<title>Parks</title>
-	<meta name="author" content="Riccardo Grinover and Reef Stevens" />
-	<meta name="description" content="Website to search for parks" />
-	<meta charset="UTF-8" />
-	<link href="style/style.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="scripts.js"></script>
-</head>
-
+<!--         Header        -->
+<?php
+require 'adminPermission.inc';
+?>
 
 <body>
-
-	<!--         Header        -->
-	<?php
-        require "header.php";
-    ?>
 
 	<div class="pagecontent">
 		<!--         Search and large park background        -->

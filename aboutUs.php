@@ -1,8 +1,7 @@
 <!--         Header        -->
 <?php
-require "header.php";
+require 'adminPermission.inc';
 ?>
-
 
 <body id="aboutUs">
 
