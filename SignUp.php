@@ -6,7 +6,7 @@
 		<meta name="author" content="Riccardo Grinover and Reef Stevens" />
 		<meta name="description" content="Website to search for parks" />
 		<meta charset="UTF-8" />
-		<link href="style.css" rel="stylesheet" type="text/css" />
+		<link href="style/style.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="scripts.js"></script>
 </head>
 

@@ -6,7 +6,7 @@
     <meta name="author" content="Riccardo Grinover and Reef Stevens" />
     <meta name="description" content="Website to search for parks" />
     <meta charset="UTF-8" />
-    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="style/style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="scripts.js"></script>
 </head>
 
@@ -36,7 +36,7 @@
                         <div class="flexsearch--wrapper">
                             <form class="flexsearch--form" action="#" method="post">
                                 <div class="flexsearch--input-wrapper">
-                                    <input class="flexsearch--input" type="search" placeholder="Search..." onClick="window.location.href='resultsPage.php'">
+                                    <input class="flexsearch--input" type="search" placeholder="Search...">
                                 </div>
 
                                 <input class="flexsearch--submit" type="submit" value="&#10140;" onClick="searchNow()" />
