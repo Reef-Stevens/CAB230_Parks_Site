@@ -1,22 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--         Header        -->
+<?php
+require "header.php";
+?>
 
-<head>
-    <title>Home Page</title>
-    <meta name="author" content="Riccardo Grinover and Reef Stevens" />
-    <meta name="description" content="Website to search for parks" />
-    <meta charset="UTF-8" />
-    <link href="style/style.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="scripts.js"></script>
-</head>
 
 <body id="homePage">
-
-    <!--         Header        -->
-    <?php
-        require "header.php";
-    ?>
-
     <div class="pagecontent">
 
         <!--         Search and large park background        -->
@@ -149,11 +137,7 @@
         </div>
     </div>
 
-    <!--       Footer       -->
-    <?php
-        require "footer.php";
-    ?>
-
-</body>
-
-</php>
+<!--       Footer       -->
+<?php
+require "footer.php";
+?>

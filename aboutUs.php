@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-	<title>About Us</title>
-	<meta name="author" content="Riccardo Grinover and Reef Stevens" />
-	<meta name="description" content="Website to search for parks" />
-	<meta charset="UTF-8" />
-	<link href="style.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="scripts.js"></script>
-</head>
-
+<!--         Header        -->
+<?php
+require "header.php";
+?>
 
 
 <body id="aboutUs">
-
-
-	<!--         Header        -->
-	<?php
-        require "header.php";
-    ?>
-
 
 	<div class="pagecontent">
 		<!--       About Us        -->

@@ -1,48 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-	<title>Log In</title>
-	<meta name="author" content="Riccardo Grinover and Reef Stevens" />
-	<meta name="description" content="Website to search for parks" />
-	<meta charset="UTF-8" />
-	<link href="style/style.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="scripts.js"></script>
-</head>
-
+<!--         Header        -->
+<?php
+require "header.php";
+?>
 
 <body id="login">
 
-
-	<!--         Header        -->
-	<?php
-        require "header.php";
-    ?>
-
 	<div class="pagecontent">
 		<div class="section loginform">
-			<form class="loginform-container">
-				<div class="loginform-content">
-					<label><b>E-mail</b></label>
-					<input type="email" placeholder="Enter Email" name="email" required>
 
-					<label><b>Password</b></label>
-					<input type="password" placeholder="Enter Password" name="psw" required>
+			<?php
+			$errors = array();
+			require 'validate.php';
+			if (isset($_POST['login'])) {
+				validateEmail($errors, $_POST, 'email');
+				validatePass($errors, $_POST, 'pass');
+				if ($errors) {
+					include 'form_login.php';
+				} else {
+					$pass = $_POST['pass'];
+					$email = $_POST['email'];
 
-					<div class="buttons-container">
-						<button type="submit" class="loginbtn">Login</button>
-					</div>
-				</div>
-			</form>
+					if (isset($_POST['login']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+					}
+					include 'form_login.php';
+				}
+			} else {
+				include 'form_login.php';
+			}
+			?>
 		</div>
 	</div>
 
 	<!--       Footer       -->
 	<?php
-        require "footer.php";
-    ?>
-
-
-</body>
-
-</php>
+	require "footer.php";
+	?>

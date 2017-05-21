@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--         Header        -->
+<?php
+require "header.php";
+?>
 
-<head>
-		<title>Sign Up</title>
-		<meta name="author" content="Riccardo Grinover and Reef Stevens" />
-		<meta name="description" content="Website to search for parks" />
-		<meta charset="UTF-8" />
-		<link href="style/style.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="scripts.js"></script>
-</head>
 
 <body id="signUp">
-
-	<!--         Header        -->
-	<?php
-        require "header.php";
-    ?>
-
-
+	<!--         Signup        -->
 	<div class="pagecontent">
-		<!--  Signup -->
 		<div class="section signupform">
 					<?php
 					$errors = array();
@@ -31,15 +18,25 @@
 						validateDate($errors, $_POST, 'date');
 						validatePass($errors, $_POST, 'pass');
 						if ($errors) {
-							include 'form.php';
+							include 'form_signup.php';
 						} else {
-							echo '1';
-							include 'register.php';
-							include 'form.php';
-							echo 'form submitted successfully with no errors';
+							$name = $_POST['name'];
+							$pass = $_POST['pass'];
+							$email = $_POST['email'];
+
+							if (isset($_POST['signup']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+								require 'register.php';
+								if(register($name,$pass,$email)) {
+									redirect_to('form_login.php');
+								} else {
+									include 'form_signup.php';
+								}
+							} else {
+								include 'form_signup.php';
+							}
 						}
 					} else {
-						include 'form.php';
+						include 'form_signup.php';
 					}
 					?>
 		</div>
@@ -48,10 +45,5 @@
 
 	<!--       Footer       -->
 	<?php
-        require "footer.php";
-    ?>
-
-
-</body>
-
-</php>
+	require "footer.php";
+	?>
