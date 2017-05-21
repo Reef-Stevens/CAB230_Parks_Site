@@ -33,7 +33,9 @@
 						if ($errors) {
 							include 'form.php';
 						} else {
+							echo '1';
 							include 'register.php';
+							include 'form.php';
 							echo 'form submitted successfully with no errors';
 						}
 					} else {
