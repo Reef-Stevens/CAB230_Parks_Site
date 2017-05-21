@@ -22,14 +22,32 @@ require "header.php";
                           </div>
                       </div>
                         <div class="flexsearch--wrapper">
-                            <form class="flexsearch--form" action="#" method="post">
+                            <form class="flexsearch--form" action="results.php" method="post">
                                 <div class="flexsearch--input-wrapper">
-                                    <input class="flexsearch--input" type="search" placeholder="Search...">
+                                    <input class="flexsearch--input" type="text" placeholder="Search...">
                                 </div>
 
-                                <input class="flexsearch--submit" type="submit" value="&#10140;" onClick="searchNow()" />
-                                <!-- NEED TO LINK THIS TO THE RESULTS PAGE onClick="window.location.href='resultsPage.php'" -->
+                                <input class="flexsearch--submit" type="submit" value="&#10140;" />
                             </form>
+
+                            <?php
+                            include('createdb.inc');
+
+                            if (isset($_POST['parkNameSearch'])) {
+
+                            // Users search terms is saved in $_POST['q']
+                            $q = $_POST['parkNameSearch'];
+                            // Prepare statement
+                            $search = $pdo->prepare("SELECT Name  FROM dataset WHERE Name LIKE ?");
+                            // Execute with wildcards
+                            $search->execute(array("%$q%"));
+                            // Echo results
+                            foreach($search as $s) {
+                              echo $s['Name'];
+                            }
+                            }
+                            ?>
+
                         </div>
                     </div>
                 </div>
