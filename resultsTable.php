@@ -1,5 +1,5 @@
 
-<table width="100%" border="solid" class="table">
+<table class="search-results" width="100%" class="table">
     <thead>
     <th>
         Park Name
@@ -22,7 +22,7 @@
 <?php
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             echo "<tr>";
-            echo '<td><a href="result.php?id=' . $row['id'] . '">'. $row['Name'] .'</a></td>';
+            echo '<td><a class="link" href="result.php?id=' . $row['id'] . '">'. $row['Name'] .'</a></td>';
             echo '<td>' . $row['Suburb'] . '</td>';
             echo '<td>' . $row['Street'] . '</td>';
             echo '<td>' . $row['Latitude'] . '</td>';

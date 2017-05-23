@@ -292,7 +292,34 @@ button {
 .map_field {
     text-align: center;
 }
+/* -------------------------------------------------------------------------- */
+.table-results {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 50px;
+}
 
+.search-results table {
+    border-collapse: collapse;
+
+}
+
+.search-results th{
+    background-color: #4CAF50;
+}
+
+.search-results th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.search-results tr:hover{
+    background-color:#b3ffb3;
+}
+a.link {
+    text-decoration: none;
+}
 
 /* ----------------------------- Dropdown menu ------------------------------ */
 

@@ -25,6 +25,38 @@ require 'adminPermission.inc';
                 </form>
             </div>
         </div>
+
+        <div class="table-results">
+        <?php
+        include('createdb.inc');
+
+        if (isset($_GET['search'])) {
+            // Users search terms is taken and saved
+            $search = $_GET['search'];
+
+            // If the search was done by name
+            if($_GET["select"] == "searchByName") {
+                // Prepare statement
+                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Name LIKE ?");
+                // Execute with wildcards
+                $query->execute(array("%$search%"));
+                // Echo results
+                include 'resultsTable.php';
+            }
+
+            // If the search was done by suburb
+            if($_GET["select"] == "searchBySuburb") {
+                // Prepare statement
+                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Suburb LIKE ?");
+                // Execute with wildcards
+                $query->execute(array("%$search%"));
+                // Echo results
+                include 'resultsTable.php';
+            }
+        }
+        ?>
+        </div>
+        
         <div class="map_field" id="GoogleMap">
             <!--          Geolocation Map           -->
             <button onclick="getLocation()">Search your Location!</button>
@@ -32,36 +64,6 @@ require 'adminPermission.inc';
             <img class="homeMap" src="images/homePageMap.png" alt="map">
         </div>
     </div>
-
-    <?php
-    include('createdb.inc');
-
-    if (isset($_GET['search'])) {
-        // Users search terms is taken and saved
-        $search = $_GET['search'];
-
-        // If the search was done by name
-        if($_GET["select"] == "searchByName") {
-            // Prepare statement
-            $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Name LIKE ?");
-            // Execute with wildcards
-            $query->execute(array("%$search%"));
-            // Echo results
-            include 'resultsTable.php';
-        }
-
-        // If the search was done by suburb
-        if($_GET["select"] == "searchBySuburb") {
-            // Prepare statement
-            $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Suburb LIKE ?");
-            // Execute with wildcards
-            $query->execute(array("%$search%"));
-            // Echo results
-            include 'resultsTable.php';
-        }
-
-    }
-    ?>
 
 <!--       Footer       -->
 <?php
