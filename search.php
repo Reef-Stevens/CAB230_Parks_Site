@@ -43,20 +43,17 @@ require 'adminPermission.inc';
             $search = $pdo->prepare("SELECT Name  FROM dataset WHERE Name LIKE ?");
             // Execute with wildcards
             $search->execute(array("%$q%"));
-
-
+            // Echo results
             include 'resultsTable.php';
         }
 
         if($_REQUEST["select"] = "searchBySuburb") {
             // Prepare statement
-            $search = $pdo->prepare("SELECT Suburb, Name  FROM dataset WHERE Suburb LIKE ?");
+            $search = $pdo->prepare("SELECT Suburb  FROM dataset WHERE Suburb LIKE ?");
             // Execute with wildcards
             $search->execute(array("%$q%"));
             // Echo results
-            foreach ($search as $s) {
-                echo $s['Name'];
-            }
+            include 'resultsTable.php';
         }
 
     }
