@@ -10,12 +10,9 @@ require 'adminPermission.inc';
         <!--         Search and large park background        -->
         <div class="section">
             <div class="parkbg">
-                <div class="container parksearchcontent">
-                    <div class="flexsearch">
-                        <div class="flexsearch--wrapper">
-                          <button onclick="window.location.href='search.php'" class="loginopt">Search</button>
-                        </div>
-                    </div>
+                <!-- <div class="container parksearchcontent flexsearch flexsearch--wrapper"> -->
+                <div class="search">
+                          <button onclick="window.location.href='search.php'" class="loginopt">Search for Parks!</button>
                 </div>
             </div>
         </div>
