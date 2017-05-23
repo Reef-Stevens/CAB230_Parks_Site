@@ -28,7 +28,7 @@ $search->execute(array("%$q%"));
 
         while ($row = $search->fetch(PDO::FETCH_ASSOC)) {
             echo "<tr>";
-            echo '<td><a href="individualPageOne.php?id=' . $row['id'] . '">'. $row['Name'] .'</a></td>';
+            echo '<td><a href="result.php?id=' . $row['id'] . '">'. $row['Name'] .'</a></td>';
             echo '<td>' . $row['Suburb'] . '</td>';
             echo '<td>' . $row['Street'] . '</td>';
             echo '<td>' . $row['Latitude'] . '</td>';

@@ -20,7 +20,28 @@ require 'adminPermission.inc';
 	<div class="section">
 		<div class="containerMap">
 			<h1><?php  echo $data['Name'];  ?></h1>
-			<img class="resultMap" src="images/test.png" alt="parkMap">
+
+
+
+			<div id="map" style="width:100%;height:500px;background:yellow"></div>
+
+			<script>
+			function myMap() {
+			var mapOptions = {
+			    center: new google.maps.LatLng(51.5, -0.12),
+			    zoom: 10,
+			    mapTypeId: google.maps.MapTypeId.HYBRID
+			}
+			var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+			}
+			</script>
+
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+
+
+
+
+
 		</div>
 	</div>
 
