@@ -222,7 +222,7 @@ button {
 
 .section .parkbg {
     background: #2ecc71;
-    background-image: url(images/backgroundOne.png);
+    background-image: url(../images/backgroundOne.png);
     background-position: center;
     background-repeat: no-repeat;
     min-width: 480px;

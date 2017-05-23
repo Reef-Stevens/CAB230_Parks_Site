@@ -50,14 +50,10 @@ src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA4ecW0bx03nOIZZa8r394XP
 */
 
 
-function searchNow() {
-    window.location.href = 'resultsPage.html';
-}
 
-
-var x = document.getElementById("demo");
 
 function getLocation() {
+    var x = document.getElementById("demo");
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
@@ -66,11 +62,13 @@ function getLocation() {
 }
 
 function showPosition(position) {
+    var x = document.getElementById("demo");
     x.innerHTML = "Latitude: " + position.coords.latitude +
     "<br>Longitude: " + position.coords.longitude;
 }
 
 function showError(error) {
+    var x = document.getElementById("demo");
     switch(error.code) {
         case error.PERMISSION_DENIED:
             x.innerHTML = "User denied the request for Geolocation."
