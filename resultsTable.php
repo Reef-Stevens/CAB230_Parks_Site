@@ -20,12 +20,6 @@
     <tbody>
 
 <?php
-
-$search = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Name LIKE ?");
-// Execute with wildcards
-$search->execute(array("%$q%"));
-
-
         while ($row = $search->fetch(PDO::FETCH_ASSOC)) {
             echo "<tr>";
             echo '<td><a href="result.php?id=' . $row['id'] . '">'. $row['Name'] .'</a></td>';
