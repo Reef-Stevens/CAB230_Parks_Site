@@ -20,7 +20,7 @@
     <tbody>
 
 <?php
-        while ($row = $search->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             echo "<tr>";
             echo '<td><a href="result.php?id=' . $row['id'] . '">'. $row['Name'] .'</a></td>';
             echo '<td>' . $row['Suburb'] . '</td>';

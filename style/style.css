@@ -239,6 +239,28 @@ button {
     border: 3px solid #FFF;
 }
 
+.space {
+    margin-top: 75%;
+    background: black;
+    margin-top: 100px;
+    line-height: 8000px;
+    clear:left;
+  height:25px;
+  margin-top:20px;
+  margin-right:20px;
+  margin-bottom:20px;
+  margin-left:20px;
+}
+
+/*.searchform-container.input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    min-width: 200px;
+}*/
 
 /* ----------------------------- Dropdown menu ------------------------------ */
 

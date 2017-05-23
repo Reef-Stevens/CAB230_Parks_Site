@@ -20,11 +20,11 @@
                     </div>
                 </div>
                 <ul class="nav">
-                    <li><a href="index.php#GoogleMap">Nearby Parks</a></li>
-                    <li><a href="index.php#featuredParks">Featured Parks</a></li>
+                    <li><a href="index.php#ref">Nearby Parks</a></li>
+                    <li><a href="search.php">Search Parks</a></li>
                     <li><a href="aboutUs.php">About</a></li>
                     <!-- Button on front page to open signup popup form -->
-                    <li><button onclick="window.location.href='SignUp.php'" class="signupopt">Sign Up</button>
+                    <li><button onclick="window.location.href='signup.php'" class="signupopt">Sign Up</button>
                         <button onclick="window.location.href='Login.php'" class="loginopt">Login</button></li>
                 </ul>
             </div>
