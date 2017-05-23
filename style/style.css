@@ -245,22 +245,54 @@ button {
     margin-top: 100px;
     line-height: 8000px;
     clear:left;
-  height:25px;
-  margin-top:20px;
-  margin-right:20px;
-  margin-bottom:20px;
-  margin-left:20px;
+    height:25px;
+    margin-top:20px;
+    margin-right:20px;
+    margin-bottom:20px;
+    margin-left:20px;
 }
 
-/*.searchform-container.input[type=text] {
-    width: 100%;
+/*.search_field {
+    min-width: 250px;
+    margin-left: 20%;
+}*/
+
+.searchform select {
+    width: 80px;
+    float: left;
+    padding: 11px 0px;
+    margin: 8px 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.searchform input[type=submit] {
+    width: 40px;
+    float: left;
+    padding: 11px 0px;
+    margin: 8px 0px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.searchform input[type=text] {
+    width: 57%;
+    float: left;
+    clear: left;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin-left: 15%;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
     min-width: 200px;
-}*/
+}
+
+.map_field {
+    text-align: center;
+}
+
 
 /* ----------------------------- Dropdown menu ------------------------------ */
 

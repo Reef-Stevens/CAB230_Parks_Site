@@ -11,9 +11,10 @@ require 'adminPermission.inc';
         <!-- Previous search, in serach bar, along with settings -->
         <div class="row search_bg">
             <div class="container search_field">
-                <form class="searchform-container" name="myForm" action="search.php" method="get">
+                <form class="searchform" name="myForm" action="search.php" method="get">
+                    <!-- Search box -->
                     <input type="text" name="search" placeholder="Search..."/>
-                    <label>Catagory: </label>
+                    <!-- Categories -->
                     <select name="select">
                         <option value="searchByName" selected>Name</option>
                         <option value="searchBySuburb">Suburb</option>
@@ -21,13 +22,15 @@ require 'adminPermission.inc';
                         <option value="searchByLocation">Location</option>
                     </select>
                     <input type="submit" value="&#10140;">
-
                 </form>
-                <br>
-
             </div>
         </div>
-
+        <div class="map_field" id="GoogleMap">
+            <!--          Geolocation Map           -->
+            <button onclick="getLocation()">Search your Location!</button>
+            <p id="demo"></p>
+            <img class="homeMap" src="images/homePageMap.png" alt="map">
+        </div>
     </div>
 
     <?php
@@ -59,12 +62,6 @@ require 'adminPermission.inc';
 
     }
     ?>
-
-  <!--          Geolocation Map           -->
-  <button onclick="getLocation()">Get Location</button>
-
-  <p id="demo"></p>
-
 
 <!--       Footer       -->
 <?php
