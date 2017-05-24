@@ -10,10 +10,15 @@ require 'adminPermission.inc';
 
 	// get id for park clicked on previous page
 	$id = $_GET['id'];
+	if ($id == 0) {
+		$id = $_SESSION['id']; // get id from session
+	} else {
+		$_SESSION['id'] = $id; // save id in session
+	}
+
 	// Query for data of selcted park
 	$query = $pdo->prepare("SELECT Name, Suburb, Street, Latitude, Longitude  FROM dataset WHERE id = :id");
 	$query->bindValue(':id', $id);
-
 	try {
 		$query->execute();
 	} catch (PDOException $e) {
@@ -40,7 +45,7 @@ require 'adminPermission.inc';
 			}
 			</script>
 
-			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+			<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
 
 		</div>
 	</div>
@@ -51,19 +56,75 @@ require 'adminPermission.inc';
 	</div>
 
 	<?php
-	include 'form_review.php';
+    if (isset($_SESSION['isAdmin'])) {
+		if (isset($_POST['submit'])) {
+			$review = $_POST['review'];
+			$rating = $_POST['rating'];
+			$email = $_SESSION['email'];
+
+			$pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
+		    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			$query = $pdo->prepare("SELECT * FROM users WHERE userEmail = :email");
+			$query->bindValue(':email', $email);
+
+			try {
+		        $query->execute();
+		    } catch (PDOException $e) {
+		        echo $e->getMessage();
+		    }
+			$row = $query->fetch(PDO::FETCH_ASSOC);
+			$name = $row['userName'];
+
+			if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+				require 'review.php';
+				if(review($name,$review,$rating,$id)) {
+					header("Location: result.php?id=0");
+					exit;
+				} else {
+					// include 'form_review.php';
+					header("Location: result.php?id=0");
+					exit;
+				}
+			} else {
+				// include 'form_review.php';
+				header("Location: result.php?id=0");
+				exit;
+			}
+		} else {
+			include 'form_review.php';
+		}
+    }
 	?>
 
+
 	<!--         Rating        -->
+	<?php
+	$pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
+	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	$query = $pdo->prepare('SELECT * FROM reviews WHERE parkID = :id');
+	$query->bindValue(':id', $id);
+
+	try {
+		$query->execute();
+	} catch (PDOException $e) {
+		echo $e->getMessage();
+	}
+	$row = $query->fetch(PDO::FETCH_ASSOC);
+	$name = $row['userName'];
+	$review = $row['review'];
+	?>
+
 	<div class="ratingBox">
 		<div class="section bg ">
 			<div class="container">
 				<div class="reviewHolder col three backGround">
-					<h3>Riccardo Grinover</h3>
+					<h3><?php echo $name ?></h3>
 					<div class="acidjs-rating-stars">
 
 					</div>
-					<p>"Yeah man this park is fucking awesome"</p>
+					<p><?php echo $review ?></p>
 				</div>
 			</div>
 

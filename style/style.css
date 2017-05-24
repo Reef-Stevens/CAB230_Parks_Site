@@ -496,43 +496,36 @@ h2 {
 
 .reviewform-content input[type=submit] {
     width: 40px;
-    text-align: center;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
-
-.review-name input[type=text] {
-    width: 65%;
-    float: left;
-    clear: left;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    min-width: 200px;
-}
-
-.review-comment input[type=text] {
-    float: left;
-    clear: left;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    min-width: 200px;
-}
-
-
-.review-name select {
-    width: 50px;
-    padding: 11px 0px;
+    /*text-align: center;*/
+    /*display: inline-block;*/
     margin: 8px 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.reviewform-content input[type=text] {
+    float: left;
+    clear: left;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    min-width: 200px;
+}
+
+.reviewform-content select {
+    width: 50px;
+    float: left;
+    padding: 12px 10px;
+    margin: 0px 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
 
 .revLabel {
-    margin: 0px 0px 0px 70px  ;
+    float: left;
+    clear: left;
+    margin: 12px 0px 0px 16px;
 }
 
 

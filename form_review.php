@@ -9,9 +9,6 @@
             ?>
         </div>
         <div class="review-name">
-            <?php
-            input_field($errors, 'name', '', 'Enter your name');
-            ?>
             <label class='revLabel'>Rate the park:</label>
             <select name="rating">
                 <option value="1">1</option>

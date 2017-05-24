@@ -7,8 +7,8 @@ if (isset($_POST['login'])) {
 		if (loginSession($pass, $email)) {
 			session_start();
 			$_SESSION['isAdmin'] = TRUE;
+			$_SESSION['email'] = $email;
 			header("Location: http://{$_SERVER['HTTP_HOST']}/CAB230_Parks_Site/index.php");
-			exit();
 		} else {
 			header("Location: http://{$_SERVER['HTTP_HOST']}/CAB230_Parks_Site/Login.php?loginfail=true");
 			exit();
