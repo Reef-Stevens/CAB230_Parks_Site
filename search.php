@@ -15,12 +15,22 @@ require 'adminPermission.inc';
                     <!-- Search box -->
                     <input type="text" name="search" placeholder="Search..."/>
                     <!-- Categories -->
+                    <div class="set">
                     <select name="select">
                         <option value="searchByName" selected>Name</option>
                         <option value="searchBySuburb">Suburb</option>
-                        <option value="searchByRating">Rating</option>
-                        <option value="searchByLocation">Location</option>
                     </select>
+                    </div>
+                    <div class="rating">
+                    <select  name="rating">
+                        <option value="rate" selected>Any rating</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    </div>
                     <input type="submit" value="&#10140;">
                 </form>
             </div>
@@ -30,7 +40,7 @@ require 'adminPermission.inc';
         <?php
         include('createdb.inc');
 
-        if (isset($_GET['search'])) {
+        if (isset($_GET['search']) && !empty($_GET['search'])) {
             // Users search terms is taken and saved
             $search = $_GET['search'];
 
@@ -53,10 +63,12 @@ require 'adminPermission.inc';
                 // Echo results
                 include 'resultsTable.php';
             }
+
+
         }
         ?>
         </div>
-        
+
         <div class="map_field" id="GoogleMap">
             <!--          Geolocation Map           -->
             <button onclick="getLocation()">Search your Location!</button>

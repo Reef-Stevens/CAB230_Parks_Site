@@ -253,10 +253,20 @@ button {
 }
 
 .searchform select {
-    width: 80px;
+    width: 70px;
     float: left;
     padding: 11px 0px;
     margin: 8px 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.rating select {
+    width: 100px;
+    float: left;
+    padding: 11px 7px;
+    margin: 8px 8px 0px 0px  ;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
@@ -273,7 +283,7 @@ button {
 }
 
 .searchform input[type=text] {
-    width: 57%;
+    width: 48%;
     float: left;
     clear: left;
     padding: 12px 20px;
