@@ -35,7 +35,7 @@ require "header.php";
 		</div>
 	</div>
 
-	<!--       Footer       -->
-	<?php
-	require "footer.php";
-	?>
+<!--       Footer       -->
+<?php
+require "footer.php";
+?>
