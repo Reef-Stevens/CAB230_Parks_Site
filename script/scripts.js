@@ -30,3 +30,12 @@ function showError(error) {
             break;
     }
 }
+
+function myFunction() {
+    var x = document.getElementById("choose").value;
+    if (x == "searchByRating") {
+        document.getElementById("rate").style.display = "block";
+    } else {
+        document.getElementById("rate").style.display = "none";
+    }
+}
