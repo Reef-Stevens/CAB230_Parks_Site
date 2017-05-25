@@ -37,15 +37,18 @@ require 'adminPermission.inc';
 			<script>
 			function myMap() {
 			var mapOptions = {
-			    center: new google.maps.LatLng(51.5, -0.12),
-			    zoom: 10,
-			    mapTypeId: google.maps.MapTypeId.HYBRID
+			    center: new google.maps.LatLng(<?php  echo $data['Latitude'];  ?>, <?php  echo $data['Longitude'];  ?>),
+			    zoom: 15,
+			    mapTypeId:google.maps.MapTypeId.ROADMAP,
+				scrollwheel: false,
+                mapTypeControl:false,
+				navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
 			}
 			var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 			}
 			</script>
 
-			<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+			<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvhv7RHUjEOrec7yU7Eg2AKbLwm0Er1aQ&callback=myMap"></script>
 
 		</div>
 	</div>

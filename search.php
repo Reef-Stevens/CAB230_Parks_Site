@@ -111,36 +111,41 @@ require 'adminPermission.inc';
             <p><button onclick="getLocation()">Show your location!</button></p>
             <p id="error"></p>
             <div id="map" ></div>
-
+            <?php
+            // Prepare statement
+            $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset");
+            // Execute with wildcards
+            $query->execute();
+            ?>
             <script>
             var x=document.getElementById("error");
-            function getLocation()
-              {
-              if (navigator.geolocation)
-                {
-                navigator.geolocation.getCurrentPosition(showPosition,showError);
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition,showError);
+                } else {
+                    x.innerHTML="Geolocation is not supported by this browser.";
                 }
-              else{x.innerHTML="Geolocation is not supported by this browser.";}
-              }
+            }
 
-            function showPosition(position)
-              {
-              lat=position.coords.latitude;
-              lon=position.coords.longitude;
-              latlon=new google.maps.LatLng(lat, lon)
-              map=document.getElementById('map')
+            function showPosition(position) {
+                lat=position.coords.latitude;
+                lon=position.coords.longitude;
+                latlon=new google.maps.LatLng(lat, lon)
+                map=document.getElementById('map')
 
-              var myOptions={
-              center:latlon,
-              zoom:14,
-              mapTypeId:google.maps.MapTypeId.ROADMAP,
-              scrollwheel: false,
-              mapTypeControl:false,
-              navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
-              };
-              var map=new google.maps.Map(document.getElementById("map"),myOptions);
-              var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
-              }
+                var myOptions = {
+                    center:latlon,
+                    zoom:14,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP,
+                    scrollwheel: false,
+                    mapTypeControl:false,
+                    navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+                };
+                var map=new google.maps.Map(document.getElementById("map"),myOptions);
+                var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+            }
 
             function showError(error)
               {
@@ -173,6 +178,14 @@ require 'adminPermission.inc';
                 navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
             }
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+            <?php
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            ?>
+                newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
+                var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
+            <?php
+            }
+            ?>
             }
             </script>
 
