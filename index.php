@@ -23,27 +23,24 @@ require 'adminPermission.inc';
             <h1>Explore parks in Brisbane!</h1>
         </div>
         <div class="section map">
-            <div id="GoogleMap">
+            <div class="map_field" id="GoogleMap">
                 <div id="map"></div>
                 <script>
-                    function initMap() {
-                        var uluru = {
-                            lat: -25.363,
-                            lng: 131.044
-                        };
-                        var map = new google.maps.Map(document.getElementById('map'), {
-                            zoom: 4,
-                            center: uluru
-                        });
-                        var marker = new google.maps.Marker({
-                            position: uluru,
-                            map: map
-                        });
-                    }
+                function myMap() {
+                var mapOptions = {
+                    center: new google.maps.LatLng(-27.477250, 153.028564),
+                    zoom: 13,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP,
+                    scrollwheel: false,
+                    mapTypeControl:false,
+                    navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+                }
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                }
                 </script>
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4ecW0bx03nOIZZa8r394XPbnldgDvV-Y&callback=initMap">
+
+                <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvhv7RHUjEOrec7yU7Eg2AKbLwm0Er1aQ&callback=myMap"></script>
                 </script>
-                <img class="homeMap" src="images/homePageMap.png" alt="map">
             </div>
         </div>
     </div>

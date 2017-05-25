@@ -43,19 +43,19 @@ require 'adminPermission.inc';
         $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
       	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        if (isset($_GET['search']) && !empty($_GET['search'])) {
-            // Users search terms is taken and saved
-            $search = $_GET['search'];
-
-
-            if($_GET["select"] == "searchByName") { // If the search was done by name
+        if (isset($_GET['search'])) {
+            if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
+                // Users search terms is taken and saved
+                $search = $_GET['search'];
                 // Prepare statement
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Name LIKE ?");
                 // Execute with wildcards
                 $query->execute(array("%$search%"));
                 // Echo results
                 include 'resultsTable.php';
-            } else if($_GET["select"] == "searchBySuburb") { // If the search was done by suburb
+            } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['search'])) { // If the search was done by suburb
+                // Users search terms is taken and saved
+                $search = $_GET['search'];
                 // Prepare statement
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Suburb LIKE ?");
                 // Execute with wildcards
@@ -77,14 +77,18 @@ require 'adminPermission.inc';
                         $ids[$n] = $row['parkID'];
                         $n++;
                     }
-                    // Prepare statement
-                    $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
-                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE id IN (" . implode(',', array_map('intval', $ids)) . ")");
-                    // Execute with wildcards
-                    $query->execute();
-                    // Echo results
-                    include 'resultsTable.php';
+                    if(!empty($ids)){
+                        // Prepare statement
+                        $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
+                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE id IN (" . implode(',', array_map('intval', $ids)) . ")");
+                        // Execute with wildcards
+                        $query->execute();
+                        // Echo results
+                        include 'resultsTable.php';
+                    } else {
+                        echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                    }
                 } else {
                     // Prepare statement
                     $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
@@ -95,6 +99,8 @@ require 'adminPermission.inc';
                     // Echo results
                     include 'resultsTable.php';
                 }
+            }  else {
+                echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
             }
         }
         ?>
