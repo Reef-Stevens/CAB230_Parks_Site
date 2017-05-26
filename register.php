@@ -1,9 +1,9 @@
 <?php
-function register($name, $pass, $email) {
+function register($name, $pass, $email, $age, $birth) {
     $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE userEmail = :email");
+    $stmt = $pdo->prepare("SELECT * FROM members WHERE userEmail = :email");
     $stmt->bindValue(':email', $email);
 
     try {
@@ -14,13 +14,15 @@ function register($name, $pass, $email) {
     }
 
     if( $stmt->rowCount() > 0 ) {
-     echo '<div class="form_output"><p>Email already registered!</p></div>';
-     return False;
+        echo '<div class="form_output"><p>Email already registered!</p></div>';
+        return False;
     } else {
-        $stmt = $pdo->prepare('INSERT INTO users (userName, userPass, userEmail) VALUES (:name, SHA2(CONCAT(:pass, "4b3403665fea6"), 0), :email)');
+        $stmt = $pdo->prepare('INSERT INTO members (userName, userPass, userEmail, age, birth) VALUES (:name, SHA2(CONCAT(:pass, "4b3403665fea6"), 0), :email, :age, :birth)');
         $stmt->bindValue(':name', $name);
         $stmt->bindValue(':pass', $pass);
         $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':age', $age);
+        $stmt->bindValue(':birth', $birth);
         try {
             $stmt->execute();
             echo '<div class="form_output">Thank you for registring! Login to continue.</div>';

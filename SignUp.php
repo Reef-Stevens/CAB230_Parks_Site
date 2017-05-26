@@ -22,10 +22,12 @@ require 'adminPermission.inc';
 					$name = $_POST['name'];
 					$pass = $_POST['pass'];
 					$email = $_POST['email'];
+					$age = $_POST['age'];
+					$birth = $_POST['date'];
 
 					if (isset($_POST['signup']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 						require 'register.php';
-						if(register($name,$pass,$email)) {
+						if(register($name,$pass,$email, $age, $birth)) {
 							header("Location: Login.php");
 							exit;
 						} else {
