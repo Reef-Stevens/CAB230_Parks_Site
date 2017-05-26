@@ -1,4 +1,3 @@
-
 <table class="search-results" width="100%" class="table">
     <thead>
     <th>
@@ -18,9 +17,8 @@
     </th>
     </thead>
     <tbody>
-
-<?php
-        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        <?php
+        foreach ($data as $row) {
             echo "<tr>";
             echo '<td><a class="link" href="result.php?id=' . $row['id'] . '">'. $row['Name'] .'</a></td>';
             echo '<td>' . $row['Suburb'] . '</td>';
@@ -29,7 +27,6 @@
             echo '<td>' . $row['Longitude'] . '</td>';
             echo "</tr>";
         }
-?>
-
+        ?>
     </tbody>
 </table>

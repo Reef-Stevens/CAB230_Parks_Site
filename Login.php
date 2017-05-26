@@ -1,16 +1,18 @@
 <?php
+// checks if user is logged in
 if (isset($_POST['login'])) {
 	if (isset($_POST['login']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-		require 'userLogin.php';
+		require 'userLogin.php'; //script to check if user is logged in
 		$pass = $_POST['pass'];
 		$email = $_POST['email'];
-		if (loginSession($pass, $email)) {
+		if (loginSession($pass, $email)) { // check if user is logged in
 			session_start();
+			// adds needed info to the session
 			$_SESSION['isAdmin'] = TRUE;
 			$_SESSION['email'] = $email;
-			header("Location: http://{$_SERVER['HTTP_HOST']}/CAB230_Parks_Site/index.php");
+			header("Location: index.php");
 		} else {
-			header("Location: http://{$_SERVER['HTTP_HOST']}/CAB230_Parks_Site/Login.php?loginfail=true");
+			header("Location: Login.php?loginfail=true"); // set value for failed login
 			exit();
 		}
 	}
@@ -19,17 +21,16 @@ if (isset($_POST['login'])) {
 
 <!--         Header        -->
 <?php
-require "header.php";
+include "header.inc";
 ?>
 
 <body id="login">
 
 	<div class="pagecontent">
+		<!--   login form container  -->
 		<div class="section loginform">
 			<?php
-			if (isset($_GET['loginfail'])){
-				echo "<h1>Login failed</h1>";
-			}
+			// form for the login of users created via a constructor
 			include 'form_login.php';
 			?>
 		</div>

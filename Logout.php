@@ -1,7 +1,8 @@
 <?php
+    // removes user info from the session
     session_start();
     unset($_SESSION['isAdmin']);
     unset($_SESSION['email']);
-    header("Location: http://{$_SERVER['HTTP_HOST']}/CAB230_Parks_Site/index.php");
+    header("Location: index.php"); // sends back to the home page
     exit();
 ?>

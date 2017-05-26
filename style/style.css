@@ -148,14 +148,6 @@ button {
     box-sizing: border-box;
 }
 
-
-/* Style of front page buttons */
-
-.signinopt, .loginopt {
-    margin: 5px;
-}
-
-
 /* Form buttons */
 
 .signupbtn, .loginbtn {

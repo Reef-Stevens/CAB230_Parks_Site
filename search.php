@@ -1,6 +1,6 @@
 <!--         Header        -->
 <?php
-require 'adminPermission.inc';
+include 'header.inc';
 ?>
 
 <body>
@@ -36,8 +36,7 @@ require 'adminPermission.inc';
                     <div class="suburb">
                         <select id="suburb" name="suburb">
                             <?php
-                            $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
-                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                            include 'pdo.inc';
                             $query = $pdo->prepare("SELECT Suburb FROM items");
                             try {
                                 $query->execute(); // Execute with wildcards
@@ -48,7 +47,7 @@ require 'adminPermission.inc';
                             while ($row = $query->fetch(PDO::FETCH_ASSOC)){ // Save all park IDs in an array
                                 if ($row['Suburb'] != $last) {
                                     $last = $row['Suburb'];
-                                    echo '<option value='.$row['Suburb'].'>'.$row['Suburb'].'</option>';
+                                    echo '<option value="'.$row['Suburb'].'">'.$row['Suburb'].'</option>';
                                 }
                             }
                             ?>
@@ -62,8 +61,7 @@ require 'adminPermission.inc';
         <!--  Results table  -->
         <div class="table-results">
         <?php
-        $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        include 'pdo.inc';
 
         if (isset($_GET['search'])) {
             if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
@@ -75,20 +73,24 @@ require 'adminPermission.inc';
                     echo $e->getMessage();
                 }
 
-                include 'resultsTable.php';// Echo results
+                $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                include 'resultsTable.inc'; // Echo results
+
+                include 'searchMap.inc';
 
             } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['suburb'])) { // If the search was done by suburb
                 $suburb = $_GET['suburb'];
-                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Suburb LIKE ?");
+                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Suburb = :suburb");
                 $query->bindValue(':suburb', $suburb);
                 try {
-                    $query->execute(array("%$suburb%")); // Execute with wildcards
+                    $query->execute(); // Execute with wildcards
                 } catch (PDOException $e) {
                     echo $e->getMessage();
                 }
+                $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                include 'resultsTable.inc'; // Echo results
 
-                include 'resultsTable.php'; // Echo results
-
+                include 'searchMap.inc';
             } else if($_GET["select"] == "searchByRating") { // If the search was done by rating
                 $rate = $_GET["rating"];
                 if ($rate != "rate") {
@@ -114,18 +116,30 @@ require 'adminPermission.inc';
                             echo $e->getMessage();
                         }
 
-                        include 'resultsTable.php'; // Echo results
+                        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                        include 'resultsTable.inc'; // Echo results
+
+                        include 'searchMap.inc';
                     } else {
                         echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                        include 'map.inc';
                     }
                 } else {
                     $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items");
-                    $query->execute();
+                    try {
+                        $query->execute(); // Execute with wildcards
+                    } catch (PDOException $e) {
+                        echo $e->getMessage();
+                    }
 
-                    include 'resultsTable.php'; // Echo results
+                    $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                    include 'resultsTable.inc'; // Echo results
+
+                    include 'searchMap.inc';
                 }
             }  else {
                 echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                include 'map.inc';
             }
         }
         ?>
@@ -174,8 +188,8 @@ require 'adminPermission.inc';
                 var map=new google.maps.Map(document.getElementById("map"),myOptions);
                 var marker=new google.maps.Marker({position:latlon,animation:google.maps.Animation.BOUNCE,map:map,title:"You are here!"});
                 <?php
-                $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                include 'pdo.inc';
                 // Prepare statement
                 $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items");
                 // Execute with wildcards
@@ -207,34 +221,6 @@ require 'adminPermission.inc';
                   break;
                 }
               }
-            </script>
-
-            <script>
-            function myMap() {
-                var mapOptions = {
-                    center: new google.maps.LatLng(-27.477250, 153.028564),
-                    zoom: 13,
-                    mapTypeId:google.maps.MapTypeId.ROADMAP,
-                    scrollwheel: false,
-                    mapTypeControl:false,
-                    navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
-                }
-                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-                <?php
-                $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                // Prepare statement
-                $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items");
-                // Execute with wildcards
-                $query->execute();
-                while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                ?>
-                    newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
-                    var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
-                <?php
-                }
-                ?>
-            }
             </script>
 
             <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvhv7RHUjEOrec7yU7Eg2AKbLwm0Er1aQ&callback=myMap"></script>

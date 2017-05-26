@@ -1,5 +1,6 @@
     <div class="section">
         <div class="footer">
+            <!--  Contact information of students with QUT unit code and year  -->
             <div class="container white">
                 <div class="col three left">
                     <h1>Contact</h1>

@@ -1,6 +1,6 @@
 <!--         Header        -->
 <?php
-require 'adminPermission.inc';
+include 'header.inc';
 ?>
 
 <body id="signUp">

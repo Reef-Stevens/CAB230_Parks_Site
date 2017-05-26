@@ -1,12 +1,11 @@
 <!--         Header        -->
 <?php
-require 'adminPermission.inc';
+include 'header.inc';
 ?>
 
 <body id="individualPageOne">
 	<?php
-	$pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	include 'pdo.inc';
 
 	// get id for park clicked on previous page
 	$id = $_GET['id'];
@@ -36,15 +35,17 @@ require 'adminPermission.inc';
 
 			<script>
 			function myMap() {
-			var mapOptions = {
-			    center: new google.maps.LatLng(<?php  echo $data['Latitude'];  ?>, <?php  echo $data['Longitude'];  ?>),
-			    zoom: 15,
-			    mapTypeId:google.maps.MapTypeId.ROADMAP,
-				scrollwheel: false,
-                mapTypeControl:false,
-				navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
-			}
-			var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+				latlon = new google.maps.LatLng(<?php  echo $data['Latitude'];  ?>, <?php  echo $data['Longitude'];  ?>);
+				var mapOptions = {
+				    center:latlon,
+				    zoom: 15,
+				    mapTypeId:google.maps.MapTypeId.ROADMAP,
+					scrollwheel: false,
+	                mapTypeControl:false,
+					navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+				}
+				var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+				var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
 			}
 			</script>
 
@@ -66,8 +67,7 @@ require 'adminPermission.inc';
 			$email = $_SESSION['email'];
 			$date = date("d/m/Y");
 
-			$pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
-		    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			include 'pdo.inc';
 
 			$query = $pdo->prepare("SELECT * FROM members WHERE userEmail = :email");
 			$query->bindValue(':email', $email);
@@ -104,8 +104,7 @@ require 'adminPermission.inc';
 
 	<!--         Rating        -->
 	<?php
-	$pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	include 'pdo.inc';
 
 	$query = $pdo->prepare('SELECT * FROM reviews WHERE parkID = :id');
 	$query->bindValue(':id', $id);
