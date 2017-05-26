@@ -64,11 +64,12 @@ require 'adminPermission.inc';
 			$review = $_POST['review'];
 			$rating = $_POST['rating'];
 			$email = $_SESSION['email'];
+			$date = date("d/m/Y");
 
 			$pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
 		    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-			$query = $pdo->prepare("SELECT * FROM users WHERE userEmail = :email");
+			$query = $pdo->prepare("SELECT * FROM members WHERE userEmail = :email");
 			$query->bindValue(':email', $email);
 
 			try {
@@ -81,7 +82,7 @@ require 'adminPermission.inc';
 
 			if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 				require 'review.php';
-				if(review($name,$review,$rating,$id)) {
+				if(review($name, $review, $rating, $id, $date)) {
 					header("Location: result.php?id=0");
 					exit;
 				} else {
@@ -134,6 +135,27 @@ require 'adminPermission.inc';
 			<div class="group"></div>
 		</div>
 	</div>
+
+	<?php
+
+		// echo '<table border="solid" width="100%">';
+		// while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+		// 	echo "<tr>",$row['userName'],"</tr><tr>";
+		// 	echo '<td>';
+		//
+		// 	echo "<table border='solid'>";
+		// 	echo "<tr><th>",$row['userName'],"</th></tr>";
+		//
+		// 	echo "<td>",$row['review'],"</td>";
+		// 	echo "<td>",$row['rating'],"</td>";
+		// 	echo "</table>";
+		//
+		//
+		//
+		// 	echo '</td>';
+		// }
+		// echo '</tr></table>';
+	?>
 
 <!--       Footer       -->
 <?php

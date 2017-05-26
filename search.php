@@ -4,14 +4,12 @@ require 'adminPermission.inc';
 ?>
 
 <body>
-
-    <!--         Search and large park background        -->
+    <!--  Search bar with results in table and large park map  -->
     <div class="section">
-
-        <!-- Previous search, in serach bar, along with settings -->
         <div class="row search_bg">
             <div class="container search_field">
                 <h1>Search for Parks in Brisbane</h1>
+                <!--  Search form by name, suburb, and rating for parks  -->
                 <form class="searchform" name="myForm" action="search.php" method="get">
                     <!-- Search box -->
                     <input type="text" name="search" placeholder="Search by name, suburb or rating!"/>
@@ -23,6 +21,7 @@ require 'adminPermission.inc';
                             <option value="searchByRating">Rating</option>
                         </select>
                     </div>
+                    <!--  ratings selection, only appears if search by rating is selected -->
                     <div class="rating">
                         <select id="rate" name="rating">
                             <option value="rate" selected>Any rating</option>
@@ -38,66 +37,69 @@ require 'adminPermission.inc';
             </div>
         </div>
 
+        <!--  Results table  -->
         <div class="table-results">
         <?php
-        $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
-      	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         if (isset($_GET['search'])) {
             if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
-                // Users search terms is taken and saved
-                $search = $_GET['search'];
-                // Prepare statement
-                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Name LIKE ?");
-                // Execute with wildcards
-                $query->execute(array("%$search%"));
-                // Echo results
-                include 'resultsTable.php';
+                $search = $_GET['search']; // Users search terms is taken and saved
+                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Name LIKE ?");
+                try {
+                    $query->execute(array("%$search%")); // Execute with wildcards
+                } catch (PDOException $e) {
+                    echo $e->getMessage();
+                }
+
+                include 'resultsTable.php';// Echo results
+
             } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['search'])) { // If the search was done by suburb
-                // Users search terms is taken and saved
-                $search = $_GET['search'];
-                // Prepare statement
-                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE Suburb LIKE ?");
-                // Execute with wildcards
-                $query->execute(array("%$search%"));
-                // Echo results
-                include 'resultsTable.php';
+                $search = $_GET['search']; // Users search terms is taken and saved
+                $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Suburb LIKE ?");
+                try {
+                    $query->execute(array("%$search%")); // Execute with wildcards
+                } catch (PDOException $e) {
+                    echo $e->getMessage();
+                }
+
+                include 'resultsTable.php'; // Echo results
+
             } else if($_GET["select"] == "searchByRating") { // If the search was done by rating
                 $rate = $_GET["rating"];
                 if ($rate != "rate") {
-                    // Prepare statement
-                    $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
-                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $query = $pdo->prepare("SELECT * FROM reviews WHERE rating = :rate");
                     $query->bindValue(':rate', $rate);
-                    $query->execute();
+                    try {
+                        $query->execute(); // Execute with wildcards
+                    } catch (PDOException $e) {
+                        echo $e->getMessage();
+                    }
 
                     $n = 0;
-                    while ($row = $query->fetch(PDO::FETCH_ASSOC)){
+                    while ($row = $query->fetch(PDO::FETCH_ASSOC)){ // Save all park IDs in an array
                         $ids[$n] = $row['parkID'];
                         $n++;
                     }
-                    if(!empty($ids)){
-                        // Prepare statement
-                        $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
-                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                        $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset WHERE id IN (" . implode(',', array_map('intval', $ids)) . ")");
-                        // Execute with wildcards
-                        $query->execute();
-                        // Echo results
-                        include 'resultsTable.php';
+
+                    if(!empty($ids)){ // Check that at least on ID has been found
+                        $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE id IN (" . implode(',', array_map('intval', $ids)) . ")");
+                        try {
+                            $query->execute(); // Execute with wildcards
+                        } catch (PDOException $e) {
+                            echo $e->getMessage();
+                        }
+
+                        include 'resultsTable.php'; // Echo results
                     } else {
                         echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
                     }
                 } else {
-                    // Prepare statement
-                    $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
-                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset");
-                    // Execute with wildcards
+                    $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items");
                     $query->execute();
-                    // Echo results
-                    include 'resultsTable.php';
+
+                    include 'resultsTable.php'; // Echo results
                 }
             }  else {
                 echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
@@ -106,18 +108,21 @@ require 'adminPermission.inc';
         ?>
         </div>
 
+        <!--  Show map of resulting parks  -->
         <div class="map_field" >
-            <!--          Geolocation Map           -->
+            <!-- Get location of user to show parks around them -->
             <p><button onclick="getLocation()">Show your location!</button></p>
+            <!-- paragraph for errors if any occur -->
             <p id="error"></p>
+            <!-- containder for the map  -->
             <div id="map" ></div>
             <?php
-            // Prepare statement
-            $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n9441409', 'n9441409', '1password1');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM dataset");
-            // Execute with wildcards
-            $query->execute();
+            $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items");
+            try {
+                $query->execute(); // Execute with wildcards
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
             ?>
             <script>
             var x=document.getElementById("error");
@@ -137,14 +142,28 @@ require 'adminPermission.inc';
 
                 var myOptions = {
                     center:latlon,
-                    zoom:14,
+                    zoom:15,
                     mapTypeId:google.maps.MapTypeId.ROADMAP,
                     scrollwheel: false,
                     mapTypeControl:false,
                     navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
                 };
                 var map=new google.maps.Map(document.getElementById("map"),myOptions);
-                var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+                var marker=new google.maps.Marker({position:latlon,animation:google.maps.Animation.BOUNCE,map:map,title:"You are here!"});
+                <?php
+                $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // Prepare statement
+                $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items");
+                // Execute with wildcards
+                $query->execute();
+                while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                    newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
+                    var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
+                <?php
+                }
+                ?>
             }
 
             function showError(error)
@@ -169,23 +188,29 @@ require 'adminPermission.inc';
 
             <script>
             function myMap() {
-            var mapOptions = {
-                center: new google.maps.LatLng(-27.477250, 153.028564),
-                zoom: 13,
-                mapTypeId:google.maps.MapTypeId.ROADMAP,
-                scrollwheel: false,
-                mapTypeControl:false,
-                navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
-            }
-            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-            <?php
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-            ?>
-                newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
-                var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
-            <?php
-            }
-            ?>
+                var mapOptions = {
+                    center: new google.maps.LatLng(-27.477250, 153.028564),
+                    zoom: 13,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP,
+                    scrollwheel: false,
+                    mapTypeControl:false,
+                    navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+                }
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                <?php
+                $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // Prepare statement
+                $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items");
+                // Execute with wildcards
+                $query->execute();
+                while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                    newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
+                    var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
+                <?php
+                }
+                ?>
             }
             </script>
 
