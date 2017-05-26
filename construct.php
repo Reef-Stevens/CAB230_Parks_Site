@@ -28,7 +28,7 @@ function errorLabel($errors, $name) {
   if (isset($errors[$name])) {
       foreach ($errors as $field => $error) {
           if ($field == $name) {
-              echo "<span> $error </span>";
+              echo "<font color='red'>". $error ."</font>";
           }
       }
   }
