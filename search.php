@@ -37,16 +37,18 @@ include 'header.inc';
                         <select id="suburb" name="suburb">
                             <?php
                             include 'pdo.inc';
+                            // create a query to get all suburbs for the select option of the form
                             $query = $pdo->prepare("SELECT Suburb FROM items");
                             try {
-                                $query->execute(); // Execute with wildcards
+                                $query->execute();
                             } catch (PDOException $e) {
                                 echo $e->getMessage();
                             }
+                            // loop over the suburbs and add unique suburbs to the options list
                             $last = "";
                             while ($row = $query->fetch(PDO::FETCH_ASSOC)){ // Save all park IDs in an array
-                                if ($row['Suburb'] != $last) {
-                                    $last = $row['Suburb'];
+                                if ($row['Suburb'] != $last) { // check for unique suburbs
+                                    $last = $row['Suburb']; // this works as the suburbs are sorted
                                     echo '<option value="'.$row['Suburb'].'">'.$row['Suburb'].'</option>';
                                 }
                             }
@@ -63,6 +65,7 @@ include 'header.inc';
         <?php
         include 'pdo.inc';
 
+        // check what type of search was made, query and show the results in table and map
         if (isset($_GET['search'])) {
             if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
                 $search = $_GET['search']; // Users search terms is taken and saved
@@ -72,36 +75,37 @@ include 'header.inc';
                 } catch (PDOException $e) {
                     echo $e->getMessage();
                 }
-
+                // fetch all data to be used for both table and map
                 $data = $query->fetchAll(PDO::FETCH_ASSOC);
                 include 'resultsTable.inc'; // Echo results
-
                 include 'searchMap.inc';
 
             } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['suburb'])) { // If the search was done by suburb
-                $suburb = $_GET['suburb'];
+                $suburb = $_GET['suburb']; // get selected suburb option
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Suburb = :suburb");
                 $query->bindValue(':suburb', $suburb);
                 try {
-                    $query->execute(); // Execute with wildcards
+                    $query->execute();
                 } catch (PDOException $e) {
                     echo $e->getMessage();
                 }
+                // fetch all data to be used for both table and map
                 $data = $query->fetchAll(PDO::FETCH_ASSOC);
                 include 'resultsTable.inc'; // Echo results
-
                 include 'searchMap.inc';
+
             } else if($_GET["select"] == "searchByRating") { // If the search was done by rating
-                $rate = $_GET["rating"];
-                if ($rate != "rate") {
+                $rate = $_GET["rating"]; // get selected rating
+                if ($rate != "rate") { // check that rating is a numerical value
                     $query = $pdo->prepare("SELECT * FROM reviews WHERE rating = :rate");
                     $query->bindValue(':rate', $rate);
                     try {
-                        $query->execute(); // Execute with wildcards
+                        $query->execute();
                     } catch (PDOException $e) {
                         echo $e->getMessage();
                     }
 
+                    // place all the ids for the parks found in an array for next query
                     $n = 0;
                     while ($row = $query->fetch(PDO::FETCH_ASSOC)){ // Save all park IDs in an array
                         $ids[$n] = $row['parkID'];
@@ -111,23 +115,23 @@ include 'header.inc';
                     if(!empty($ids)){ // Check that at least on ID has been found
                         $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE id IN (" . implode(',', array_map('intval', $ids)) . ")");
                         try {
-                            $query->execute(); // Execute with wildcards
+                            $query->execute();
                         } catch (PDOException $e) {
                             echo $e->getMessage();
                         }
-
+                        // fetch all data to be used for both table and map
                         $data = $query->fetchAll(PDO::FETCH_ASSOC);
                         include 'resultsTable.inc'; // Echo results
-
                         include 'searchMap.inc';
-                    } else {
+
+                    } else { // no parks were found, give error message and show a map of all parks
                         echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
                         include 'map.inc';
                     }
-                } else {
+                } else { // show all parks and map relevant map
                     $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items");
                     try {
-                        $query->execute(); // Execute with wildcards
+                        $query->execute();
                     } catch (PDOException $e) {
                         echo $e->getMessage();
                     }
@@ -137,7 +141,7 @@ include 'header.inc';
 
                     include 'searchMap.inc';
                 }
-            }  else {
+            }  else { // no parks were found, give error message and show a map of all parks
                 echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
                 include 'map.inc';
             }
@@ -153,15 +157,9 @@ include 'header.inc';
             <p id="error"></p>
             <!-- containder for the map  -->
             <div id="map" ></div>
-            <?php
-            $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items");
-            try {
-                $query->execute(); // Execute with wildcards
-            } catch (PDOException $e) {
-                echo $e->getMessage();
-            }
-            ?>
+
             <script>
+            // set map scripts for finding location and showing errors
             var x=document.getElementById("error");
             function getLocation() {
                 if (navigator.geolocation) {
@@ -171,13 +169,14 @@ include 'header.inc';
                 }
             }
 
+            // function for getting and showing the users position
             function showPosition(position) {
                 lat=position.coords.latitude;
                 lon=position.coords.longitude;
                 latlon=new google.maps.LatLng(lat, lon)
                 map=document.getElementById('map')
 
-                var myOptions = {
+                var myOptions = { // map options with bouncing user marker and zoomed view
                     center:latlon,
                     zoom:15,
                     mapTypeId:google.maps.MapTypeId.ROADMAP,
@@ -188,13 +187,14 @@ include 'header.inc';
                 var map=new google.maps.Map(document.getElementById("map"),myOptions);
                 var marker=new google.maps.Marker({position:latlon,animation:google.maps.Animation.BOUNCE,map:map,title:"You are here!"});
                 <?php
-
                 include 'pdo.inc';
-                // Prepare statement
                 $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items");
-                // Execute with wildcards
-                $query->execute();
-                while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                try {
+                    $query->execute();
+                } catch (PDOException $e) {
+                    echo $e->getMessage();
+                }
+                while ($row = $query->fetch(PDO::FETCH_ASSOC)) { // show all brisbane parks
                 ?>
                     newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
                     var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
@@ -203,27 +203,26 @@ include 'header.inc';
                 ?>
             }
 
-            function showError(error)
-              {
-              switch(error.code)
-                {
+            //  check for errors and print appropriate statements
+            function showError(error) {
+                switch(error.code) {
                 case error.PERMISSION_DENIED:
-                  x.innerHTML="User denied the request for Geolocation."
-                  break;
+                    x.innerHTML="User denied the request for Geolocation."
+                    break;
                 case error.POSITION_UNAVAILABLE:
-                  x.innerHTML="Location information is unavailable."
-                  break;
+                    x.innerHTML="Location information is unavailable."
+                    break;
                 case error.TIMEOUT:
-                  x.innerHTML="The request to get user location timed out."
-                  break;
+                    x.innerHTML="The request to get user location timed out."
+                    break;
                 case error.UNKNOWN_ERROR:
-                  x.innerHTML="An unknown error occurred."
-                  break;
+                    x.innerHTML="An unknown error occurred."
+                    break;
                 }
               }
             </script>
-
-            <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvhv7RHUjEOrec7yU7Eg2AKbLwm0Er1aQ&callback=myMap"></script>
+            <!--  source of google api map  -->
+            <?php include "map_source.inc"; ?>
         </div>
     </div>
 

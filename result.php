@@ -3,9 +3,10 @@
 include 'header.inc';
 ?>
 
+<!--  Individual results page for a park selected from the search  -->
 <body id="individualPageOne">
 	<?php
-	include 'pdo.inc';
+	include 'pdo.inc'; // create new pdo
 
 	// get id for park clicked on previous page
 	$id = $_GET['id'];
@@ -23,20 +24,22 @@ include 'header.inc';
 	} catch (PDOException $e) {
 		echo $e->getMessage();
 	}
+	// get data from query
 	$data = $query->fetch(PDO::FETCH_ASSOC)
-
 	?>
 	<!--         Search and large park background        -->
 	<div class="section">
 		<div class="containerMap">
+			<!--  show name of selected park  -->
 			<h1><?php  echo $data['Name'];  ?></h1>
 
+			<!--  create map of selected park with a marker  -->
 			<div id="map" style="width:100%;height:500px;background:yellow"></div>
 
-			<script>
+			<script> // zoomed in map of individual park with marker
 			function myMap() {
 				latlon = new google.maps.LatLng(<?php  echo $data['Latitude'];  ?>, <?php  echo $data['Longitude'];  ?>);
-				var mapOptions = {
+				var mapOptions = { // map options for zoom and no scrolling set
 				    center:latlon,
 				    zoom: 15,
 				    mapTypeId:google.maps.MapTypeId.ROADMAP,
@@ -45,32 +48,35 @@ include 'header.inc';
 					navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
 				}
 				var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-				var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+				var marker=new google.maps.Marker({position:latlon,map:map,title:"<?php  echo $data['Name'];  ?>"});
 			}
 			</script>
 
-			<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvhv7RHUjEOrec7yU7Eg2AKbLwm0Er1aQ&callback=myMap"></script>
+			<!--  source for the google api map  -->
+			<?php include "map_source.inc"; ?>
 
 		</div>
 	</div>
 
+	<!--  Display suburb and street of park  -->
 	<div class="individualParkInfo">
 		<h2><?php  echo $data['Suburb'];  ?></h2>
 		<h2><?php  echo $data['Street'];  ?></h2>
 	</div>
 
 	<?php
+	// If the user is logged in, they can see a review form and add a review for the park
     if (isset($_SESSION['isAdmin'])) {
 		if (isset($_POST['submit'])) {
+			// get submitted data, the user email from the session and today's date
 			$review = $_POST['review'];
 			$rating = $_POST['rating'];
 			$email = $_SESSION['email'];
-			$date = date("d/m/Y");
+			$date = date("d/m/Y"); // today's date
 
-			include 'pdo.inc';
-
+			include 'pdo.inc'; // new pdo
 			$query = $pdo->prepare("SELECT * FROM members WHERE userEmail = :email");
-			$query->bindValue(':email', $email);
+			$query->bindValue(':email', $email); // get data for member with the session email
 
 			try {
 		        $query->execute();
@@ -78,24 +84,24 @@ include 'header.inc';
 		        echo $e->getMessage();
 		    }
 			$row = $query->fetch(PDO::FETCH_ASSOC);
-			$name = $row['userName'];
+			$name = $row['userName']; // get the user name from fetched data
 
 			if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-				require 'review.php';
-				if(review($name, $review, $rating, $id, $date)) {
+				require 'review.php'; // get required function for checking and setting a review
+				if(review($name, $review, $rating, $id, $date)) { // try to add review
 					header("Location: result.php?id=0");
 					exit;
-				} else {
+				} else { // reshow the result page with a set id
 					// include 'form_review.php';
 					header("Location: result.php?id=0");
 					exit;
 				}
-			} else {
+			} else { // reshow the result page with a set id
 				// include 'form_review.php';
 				header("Location: result.php?id=0");
 				exit;
 			}
-		} else {
+		} else { // show the review form if user is logged in
 			include 'form_review.php';
 		}
     }
@@ -105,7 +111,7 @@ include 'header.inc';
 	<!--         Rating        -->
 	<?php
 	include 'pdo.inc';
-
+	// get reviews for the selected park
 	$query = $pdo->prepare('SELECT * FROM reviews WHERE parkID = :id');
 	$query->bindValue(':id', $id);
 
@@ -115,8 +121,11 @@ include 'header.inc';
 		echo $e->getMessage();
 	}
 	$row = $query->fetch(PDO::FETCH_ASSOC);
+	// get need data from review query
 	$name = $row['userName'];
 	$review = $row['review'];
+	$rating = $row['rating'];
+	$date = $row['date'];
 	?>
 
 	<div class="ratingBox">

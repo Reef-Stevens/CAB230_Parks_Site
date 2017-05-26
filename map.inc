@@ -25,5 +25,6 @@ function myMap() {
     ?>
 }
 </script>
+
 <!--  source for the map using own key for the google map api  -->
-<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvhv7RHUjEOrec7yU7Eg2AKbLwm0Er1aQ&callback=myMap"></script>
+<?php include "map_source.inc"; ?>
