@@ -34,8 +34,20 @@ function showError(error) {
 function myFunction() {
     var x = document.getElementById("choose").value;
     if (x == "searchByRating") {
+        document.getElementById("suburb").style.display = "none";
         document.getElementById("rate").style.display = "block";
+        document.getElementById("search").placeholder = "No search needed for rating!"
+        document.getElementById("search").readOnly = true;
+    } else if (x == "searchBySuburb") {
+        document.getElementById("rate").style.display = "none";
+        document.getElementById("suburb").style.display = "block";
+        document.getElementById("search").placeholder = "No search needed for suburb!"
+        document.getElementById("search").readOnly = true;
     } else {
         document.getElementById("rate").style.display = "none";
+        document.getElementById("suburb").style.display = "none";
+        document.getElementById("search").readOnly = false;
+        document.getElementById("search").placeholder = "Search by name, suburn or rating!"
     }
+
 }

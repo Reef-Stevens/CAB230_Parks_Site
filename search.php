@@ -12,7 +12,7 @@ require 'adminPermission.inc';
                 <!--  Search form by name, suburb, and rating for parks  -->
                 <form class="searchform" name="myForm" action="search.php" method="get">
                     <!-- Search box -->
-                    <input type="text" name="search" placeholder="Search by name, suburb or rating!"/>
+                    <input id="search" type="text" name="search" placeholder="Search by name, suburb or rating!"/>
                     <!-- Categories -->
                     <div class="set">
                         <select id="choose" name="select" onchange="myFunction()">
@@ -30,6 +30,28 @@ require 'adminPermission.inc';
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
+                        </select>
+                    </div>
+                    <!--  ratings selection, only appears if search by rating is selected -->
+                    <div class="suburb">
+                        <select id="suburb" name="suburb">
+                            <?php
+                            $pdo = new PDO('mysql:host=fastapps04.qut.edu.au;port=3306;dbname=n8783012', 'n8783012', 'MySQLPassword');
+                            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                            $query = $pdo->prepare("SELECT Suburb FROM items");
+                            try {
+                                $query->execute(); // Execute with wildcards
+                            } catch (PDOException $e) {
+                                echo $e->getMessage();
+                            }
+                            $last = "";
+                            while ($row = $query->fetch(PDO::FETCH_ASSOC)){ // Save all park IDs in an array
+                                if ($row['Suburb'] != $last) {
+                                    $last = $row['Suburb'];
+                                    echo '<option value='.$row['Suburb'].'>'.$row['Suburb'].'</option>';
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                     <input type="submit" value="&#10140;">
@@ -55,11 +77,12 @@ require 'adminPermission.inc';
 
                 include 'resultsTable.php';// Echo results
 
-            } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['search'])) { // If the search was done by suburb
-                $search = $_GET['search']; // Users search terms is taken and saved
+            } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['suburb'])) { // If the search was done by suburb
+                $suburb = $_GET['suburb'];
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Suburb LIKE ?");
+                $query->bindValue(':suburb', $suburb);
                 try {
-                    $query->execute(array("%$search%")); // Execute with wildcards
+                    $query->execute(array("%$suburb%")); // Execute with wildcards
                 } catch (PDOException $e) {
                     echo $e->getMessage();
                 }

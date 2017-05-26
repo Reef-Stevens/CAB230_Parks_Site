@@ -270,10 +270,23 @@ button {
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
-
 }
 
 #rate {
+    display: none;
+}
+
+.suburb select {
+    width: 170px;
+    float: left;
+    padding: 11px 7px;
+    margin: 8px 8px 0px 0px  ;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#suburb {
     display: none;
 }
 
