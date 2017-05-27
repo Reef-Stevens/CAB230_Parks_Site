@@ -11,7 +11,7 @@ include 'header.inc';
             <div class="parkbg">
                 <div class="search">
                     <!-- Search Button - Sends to search page -->
-                    <button onclick="window.location.href='search.php'" class="loginopt">Search for Parks!</button>
+                    <button onclick="window.location.href='search.php'"class="loginopt">Search for Parks!</button>
                 </div>
             </div>
         </div>
