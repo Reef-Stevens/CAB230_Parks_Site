@@ -34,7 +34,7 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
         <?php
         include 'pdo.inc'; // new pdo for query
-        $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items WHERE Latitude BETWEEN :min_lat AND :max_lat AND Longitude BETWEEN :min_lon AND :max_lon" );
+        $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Latitude BETWEEN :min_lat AND :max_lat AND Longitude BETWEEN :min_lon AND :max_lon" );
         $query->bindValue(':max_lat', $max_lat);
         $query->bindValue(':min_lat', $min_lat);
         $query->bindValue(':max_lon', $max_lon);
@@ -44,11 +44,15 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-        ?> // create a marker for each park
-            newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
-            var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
-        <?php
+        if ($query->rowCount() > 0) {
+            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+            // include 'resultsTable.inc'; // Echo results
+            foreach ($data as $row) {
+            ?> // create a marker for each park
+                newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
+                var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
+            <?php
+            }
         }
         ?>
         latlon=new google.maps.LatLng(<?php  echo $_POST['lat'];  ?>, <?php  echo $_POST['long'];  ?>)
@@ -79,8 +83,9 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
         <?php
         include 'pdo.inc';
 
-        // check what type of search was made, query and show the results in table and map
-        if (isset($_GET['search'])) {
+        if(isset($_POST["loc"])) { // If the search was done by suburb
+            include 'resultsTable.inc'; // Echo results
+        }else if (isset($_GET['search'])) { // check what type of search was made, query and show the results in table and map
             if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
                 $search = $_GET['search']; // Users search terms is taken and saved
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Name LIKE ?");
@@ -94,6 +99,9 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
                     $data = $query->fetchAll(PDO::FETCH_ASSOC);
                     include 'resultsTable.inc'; // Echo results
                     include 'searchMap.inc';
+                } else { // no parks were found, give error message and show a map of all parks
+                    echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                    include 'map.inc';
                 }
 
             } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['suburb'])) { // If the search was done by suburb
@@ -110,6 +118,9 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
                     $data = $query->fetchAll(PDO::FETCH_ASSOC);
                     include 'resultsTable.inc'; // Echo results
                     include 'searchMap.inc';
+                } else { // no parks were found, give error message and show a map of all parks
+                    echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                    include 'map.inc';
                 }
 
             } else if($_GET["select"] == "searchByRating") { // If the search was done by rating
@@ -142,6 +153,9 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
                             $data = $query->fetchAll(PDO::FETCH_ASSOC);
                             include 'resultsTable.inc'; // Echo results
                             include 'searchMap.inc';
+                        } else { // no parks were found, give error message and show a map of all parks
+                            echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                            include 'map.inc';
                         }
 
                     } else { // no parks were found, give error message and show a map of all parks
@@ -162,7 +176,7 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
                         include 'searchMap.inc';
                     }
                 }
-            }  else { // no parks were found, give error message and show a map of all parks
+            } else { // no parks were found, give error message and show a map of all parks
                 echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
                 include 'map.inc';
             }
@@ -180,6 +194,7 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
             <form id="myForm" name="myForm" method="post">
                 <input type="hidden" id="lat" name="lat" value="1"></input>
                 <input type="hidden" id="long" name="long" value="2"></input>
+                <input type="hidden" id="loc" name="loc" value="3"></input>
             </form>
             <button onclick="getLatLon()">Show your location!</button>
             <!-- paragraph for errors if any occur -->
@@ -191,51 +206,7 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
             <?php include "map_source.inc"; ?>
 
             <script>
-            // // set map scripts for finding location and showing errors
-            // var x=document.getElementById("error");
-            // function getLocation() {
-            //     if (navigator.geolocation) {
-            //         navigator.geolocation.getCurrentPosition(showPosition,showError);
-            //     } else {
-            //         x.innerHTML="Geolocation is not supported by this browser.";
-            //     }
-            // }
-            //
-            // // function for getting and showing the users position
-            // function showPosition(position) {
-            //     lat=position.coords.latitude;
-            //     lon=position.coords.longitude;
-            //     latlon=new google.maps.LatLng(lat, lon);
-            //     map=document.getElementById('map');
-            //
-            //     var myOptions = { // map options with bouncing user marker and zoomed view
-            //         center:latlon,
-            //         zoom:15,
-            //         mapTypeId:google.maps.MapTypeId.ROADMAP,
-            //         scrollwheel: false,
-            //         mapTypeControl:false,
-            //         navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
-            //     };
-            //     var map=new google.maps.Map(document.getElementById("map"),myOptions);
-            //     var marker=new google.maps.Marker({position:latlon,animation:google.maps.Animation.BOUNCE,map:map,title:"You are here!"});
-            //     <?php
-            //     include 'pdo.inc';
-            //     $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items");
-            //     try {
-            //         $query->execute();
-            //     } catch (PDOException $e) {
-            //         echo $e->getMessage();
-            //     }
-            //     while ($row = $query->fetch(PDO::FETCH_ASSOC)) { // show all brisbane parks
-            //     ?>
-            //         newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
-            //         var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
-            //     <?php
-            //     }
-            //     ?>
-            //
-            // }
-
+            var x=document.getElementById("error");
             function getLatLon() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(submitForm,showError);
