@@ -81,11 +81,36 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
         <!--  Results table  -->
         <div class="table-results">
         <?php
-        include 'pdo.inc';
+        // include 'pdo.inc';
 
         if(isset($_POST["loc"])) { // If the search was done by suburb
+            $R = 6371;
+            $lat = $_POST['lat'];
+            $lon = $_POST['long'];
+            $distance = 8000; // in meters
+            $rad = $distance / $R; // angular radius
+            $radR = rad2deg($rad/$R);
+            $max_lat = $lat + $radR;
+            $min_lat = $lat - $radR;
+            $radR = rad2deg($rad/$R/cos(deg2rad($lat)));
+            $max_lon = $lon + $radR;
+            $min_lon = $lon - $radR;
+
+            include 'pdo.inc'; // new pdo for query
+            $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Latitude BETWEEN :min_lat AND :max_lat AND Longitude BETWEEN :min_lon AND :max_lon" );
+            $query->bindValue(':max_lat', $max_lat);
+            $query->bindValue(':min_lat', $min_lat);
+            $query->bindValue(':max_lon', $max_lon);
+            $query->bindValue(':min_lon', $min_lon);
+            try {
+                $query->execute();
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
+
+            $data = $query->fetchAll(PDO::FETCH_ASSOC);
             include 'resultsTable.inc'; // Echo results
-        }else if (isset($_GET['search'])) { // check what type of search was made, query and show the results in table and map
+        } else if (isset($_GET['search'])) { // check what type of search was made, query and show the results in table and map
             if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
                 $search = $_GET['search']; // Users search terms is taken and saved
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Name LIKE ?");

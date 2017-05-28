@@ -3,7 +3,7 @@
 function myMap() {
     var mapOptions = { // map options with no scrolling
         center: new google.maps.LatLng(-27.477250, 153.028564),
-        zoom: 13,
+        zoom: 12,
         mapTypeId:google.maps.MapTypeId.ROADMAP,
         scrollwheel: false,
         mapTypeControl:false,

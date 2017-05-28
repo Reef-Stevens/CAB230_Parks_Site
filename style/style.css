@@ -247,7 +247,7 @@ button {
 .searchform select {
     width: 85px;
     float: left;
-    padding: 12px 7px;
+    padding: 11px 7px;
     margin: 8px 10px;
     display: inline-block;
     border: 1px solid #ccc;
@@ -257,8 +257,8 @@ button {
 .rating select {
     width: 100px;
     float: left;
-    padding: 12px 7px;
-    margin: 8px 8px 0px 0px  ;
+    padding: 11px 7px;
+    margin: 8px 8px 0px 0px;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
@@ -271,7 +271,7 @@ button {
 .suburb select {
     width: 170px;
     float: left;
-    padding: 12px 7px;
+    padding: 11px 7px;
     margin: 8px 8px 0px 0px  ;
     display: inline-block;
     border: 1px solid #ccc;
@@ -285,7 +285,7 @@ button {
 .searchform input[type=submit] {
     width: 40px;
     float: left;
-    padding: 11px 0px;
+    padding: 10px 0px;
     margin: 8px 0px;
     display: inline-block;
     border: 1px solid #ccc;

@@ -67,7 +67,7 @@ include 'header.inc';
 	<?php
 	// If the user is logged in, they can see a review form and add a review for the park
     if (isset($_SESSION['isAdmin'])) {
-		if (isset($_POST['submit'])) {
+		if (isset($_POST['submit']) && !empty($_POST['review'])) {
 			// get submitted data, the user email from the session and today's date
 			$review = $_POST['review'];
 			$rating = $_POST['rating'];
@@ -120,33 +120,46 @@ include 'header.inc';
 	} catch (PDOException $e) {
 		echo $e->getMessage();
 	}
-	$row = $query->fetch(PDO::FETCH_ASSOC);
-	// get need data from review query
-	$name = $row['userName'];
-	$review = $row['review'];
-	$rating = $row['rating'];
-	$date = $row['date'];
+
+	if ($query->rowCount() > 0) {
+		$data = $query->fetchAll(PDO::FETCH_ASSOC);
+		echo '<table border="solid"  margin-left:"15%" width="60%">';
+		foreach ($data as $row) {
+			echo "<tr>";
+			// echo '<td>';
+
+			echo "<table border='solid'>";
+			echo "<tr><th>",$row['userName'],"</th></tr>";
+
+			echo "<td>",$row['review'],"</td>";
+			echo "<td>",$row['rating'],"</td>";
+			echo "</table>";
+			echo '</tr>';
+		}
+		// echo '</td>';
+		echo '</table>';
+	}
 	?>
 
-	<div class="ratingBox">
+	<!-- <div class="ratingBox">
 		<div class="section bg ">
 			<div class="container">
 				<div class="reviewHolder col three backGround">
-					<h3><?php echo $name ?></h3>
+					<h3><?php //echo $name ?></h3>
 					<div class="acidjs-rating-stars">
 
 					</div>
-					<p><?php echo $review ?></p>
+					<p><?php //echo $review ?></p>
 				</div>
 			</div>
 
 			<div class="group"></div>
 		</div>
-	</div>
+	</div> -->
 
 	<?php
 
-		// echo '<table border="solid" width="100%">';
+		// echo '<table border="solid"  margin-left:"15%" width="60%">';
 		// while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 		// 	echo "<tr>",$row['userName'],"</tr><tr>";
 		// 	echo '<td>';
