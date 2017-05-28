@@ -92,12 +92,10 @@ include 'header.inc';
 					header("Location: result.php?id=0");
 					exit;
 				} else { // reshow the result page with a set id
-					// include 'form_review.php';
 					header("Location: result.php?id=0");
 					exit;
 				}
 			} else { // reshow the result page with a set id
-				// include 'form_review.php';
 				header("Location: result.php?id=0");
 				exit;
 			}
@@ -119,63 +117,39 @@ include 'header.inc';
 		$query->execute();
 	} catch (PDOException $e) {
 		echo $e->getMessage();
-	}
-
+	}?>
+	<h1 style='text-align: center;color:#4CAF50;'>Reviews</h1>
+	<?php
 	if ($query->rowCount() > 0) {
 		$data = $query->fetchAll(PDO::FETCH_ASSOC);
-		echo '<table border="solid"  margin-left:"15%" width="60%">';
+		echo '<table class="out_table">';
+		$n = 0;
+		$f = 0;
 		foreach ($data as $row) {
-			echo "<tr>";
-			// echo '<td>';
+			if(($n % 3 == 0) && $f == 0) {
+				echo "<tr>";
+				$f = 1;
+			}else if (($n % 3 == 0) && $f == 1){
+				echo "</tr>";
+				$f = 0;
+			}
+			echo '<th>';
 
-			echo "<table border='solid'>";
-			echo "<tr><th>",$row['userName'],"</th></tr>";
-
-			echo "<td>",$row['review'],"</td>";
-			echo "<td>",$row['rating'],"</td>";
+			echo "<table class='in_table'>";
+			echo "<tr><th>",$row['userName'],"</th><th>",$row['rating'],"</th><th style='text-align:right'>",$row['reviewDate'],"</th></tr>";
+			echo "<td colspan='3'>",$row['review'],"</td>";
 			echo "</table>";
-			echo '</tr>';
+
+			echo '</th>';
+			$n++;
 		}
-		// echo '</td>';
+
 		echo '</table>';
+	} else {
+		?>
+		<p style='text-align:center'>Sorry no reviews available. Login to review this park!</p>
+		<?php
 	}
-	?>
-
-	<!-- <div class="ratingBox">
-		<div class="section bg ">
-			<div class="container">
-				<div class="reviewHolder col three backGround">
-					<h3><?php //echo $name ?></h3>
-					<div class="acidjs-rating-stars">
-
-					</div>
-					<p><?php //echo $review ?></p>
-				</div>
-			</div>
-
-			<div class="group"></div>
-		</div>
-	</div> -->
-
-	<?php
-
-		// echo '<table border="solid"  margin-left:"15%" width="60%">';
-		// while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-		// 	echo "<tr>",$row['userName'],"</tr><tr>";
-		// 	echo '<td>';
-		//
-		// 	echo "<table border='solid'>";
-		// 	echo "<tr><th>",$row['userName'],"</th></tr>";
-		//
-		// 	echo "<td>",$row['review'],"</td>";
-		// 	echo "<td>",$row['rating'],"</td>";
-		// 	echo "</table>";
-		//
-		//
-		//
-		// 	echo '</td>';
-		// }
-		// echo '</tr></table>';
 	?>
 
 <!--       Footer       -->
