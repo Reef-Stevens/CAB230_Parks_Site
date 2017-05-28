@@ -4,7 +4,7 @@ function myMap() {
     // map options for centering, zoom and no scrolling
     var mapOptions = {
         center: new google.maps.LatLng(-27.477250, 153.028564),
-        zoom: 13,
+        zoom: 14,
         mapTypeId:google.maps.MapTypeId.ROADMAP,
         scrollwheel: false,
         mapTypeControl:false,

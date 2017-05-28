@@ -3,60 +3,78 @@
 include 'header.inc';
 ?>
 
+<!--  Creates and print a map with all parks labelled  -->
+<?php
+
+if(isset($_POST['lat']) && isset($_POST['long'])){
+    $R = 6371;
+    $lat = $_POST['lat'];
+    $lon = $_POST['long'];
+    $distance = 8000; // in meters
+    $rad = $distance / $R; // angular radius
+    $radR = rad2deg($rad/$R);
+    $max_lat = $lat + $radR;
+    $min_lat = $lat - $radR;
+    $radR = rad2deg($rad/$R/cos(deg2rad($lat)));
+    $max_lon = $lon + $radR;
+    $min_lon = $lon - $radR;
+    ?>
+    <script>
+    function myMap() {
+        // map options for centering, zoom and no scrolling
+        var mapOptions = {
+            center: new google.maps.LatLng(<?php echo $lat; ?>, <?php echo $lon; ?>),
+            zoom: 14,
+            mapTypeId:google.maps.MapTypeId.ROADMAP,
+            scrollwheel: false,
+            mapTypeControl:false,
+            navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+        }
+        // creates map using the options set
+        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        <?php
+        include 'pdo.inc'; // new pdo for query
+        $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Latitude BETWEEN :min_lat AND :max_lat AND Longitude BETWEEN :min_lon AND :max_lon" );
+        $query->bindValue(':max_lat', $max_lat);
+        $query->bindValue(':min_lat', $min_lat);
+        $query->bindValue(':max_lon', $max_lon);
+        $query->bindValue(':min_lon', $min_lon);
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        if ($query->rowCount() > 0) {
+            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+            // include 'resultsTable.inc'; // Echo results
+            foreach ($data as $row) {
+            ?> // create a marker for each park
+                newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
+                var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
+            <?php
+            }
+        }
+        ?>
+        latlon=new google.maps.LatLng(<?php  echo $_POST['lat'];  ?>, <?php  echo $_POST['long'];  ?>)
+        var marker=new google.maps.Marker({position:latlon,animation:google.maps.Animation.BOUNCE,map:map,title:"You are here!"});
+    }
+    </script>
+    <?php include "map_source.inc"; ?>
+    <?php
+} else {
+    include "map.inc";
+}
+
+?>
+
 <body>
     <!--  Search bar with results in table and large park map  -->
     <div class="section">
         <div class="row search_bg">
             <div class="container search_field">
                 <h1>Search for Parks in Brisbane</h1>
-                <!--  Search form by name, suburb, and rating for parks  -->
-                <form class="searchform" name="myForm" action="search.php" method="get">
-                    <!-- Search box -->
-                    <input id="search" type="text" name="search" placeholder="Search by name, suburb or rating!"/>
-                    <!-- Categories -->
-                    <div class="set">
-                        <select id="choose" name="select" onchange="myFunction()">
-                            <option value="searchByName" selected>Name</option>
-                            <option value="searchBySuburb">Suburb</option>
-                            <option value="searchByRating">Rating</option>
-                        </select>
-                    </div>
-                    <!--  ratings selection, only appears if search by rating is selected -->
-                    <div class="rating">
-                        <select id="rate" name="rating">
-                            <option value="rate" selected>Any rating</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                    <!--  ratings selection, only appears if search by rating is selected -->
-                    <div class="suburb">
-                        <select id="suburb" name="suburb">
-                            <?php
-                            include 'pdo.inc';
-                            // create a query to get all suburbs for the select option of the form
-                            $query = $pdo->prepare("SELECT Suburb FROM items");
-                            try {
-                                $query->execute();
-                            } catch (PDOException $e) {
-                                echo $e->getMessage();
-                            }
-                            // loop over the suburbs and add unique suburbs to the options list
-                            $last = "";
-                            while ($row = $query->fetch(PDO::FETCH_ASSOC)){ // Save all park IDs in an array
-                                if ($row['Suburb'] != $last) { // check for unique suburbs
-                                    $last = $row['Suburb']; // this works as the suburbs are sorted
-                                    echo '<option value="'.$row['Suburb'].'">'.$row['Suburb'].'</option>';
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <input type="submit" value="&#10140;">
-                </form>
+                <!--  information form to search the database  -->
+                <?php include "form_search.php"; ?>
             </div>
         </div>
 
@@ -65,8 +83,9 @@ include 'header.inc';
         <?php
         include 'pdo.inc';
 
-        // check what type of search was made, query and show the results in table and map
-        if (isset($_GET['search'])) {
+        if(isset($_POST["loc"])) { // If the search was done by suburb
+            include 'resultsTable.inc'; // Echo results
+        }else if (isset($_GET['search'])) { // check what type of search was made, query and show the results in table and map
             if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
                 $search = $_GET['search']; // Users search terms is taken and saved
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Name LIKE ?");
@@ -76,9 +95,14 @@ include 'header.inc';
                     echo $e->getMessage();
                 }
                 // fetch all data to be used for both table and map
-                $data = $query->fetchAll(PDO::FETCH_ASSOC);
-                include 'resultsTable.inc'; // Echo results
-                include 'searchMap.inc';
+                if ($query->rowCount() > 0) {
+                    $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                    include 'resultsTable.inc'; // Echo results
+                    include 'searchMap.inc';
+                } else { // no parks were found, give error message and show a map of all parks
+                    echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                    include 'map.inc';
+                }
 
             } else if($_GET["select"] == "searchBySuburb" && !empty($_GET['suburb'])) { // If the search was done by suburb
                 $suburb = $_GET['suburb']; // get selected suburb option
@@ -90,9 +114,14 @@ include 'header.inc';
                     echo $e->getMessage();
                 }
                 // fetch all data to be used for both table and map
-                $data = $query->fetchAll(PDO::FETCH_ASSOC);
-                include 'resultsTable.inc'; // Echo results
-                include 'searchMap.inc';
+                if ($query->rowCount() > 0) {
+                    $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                    include 'resultsTable.inc'; // Echo results
+                    include 'searchMap.inc';
+                } else { // no parks were found, give error message and show a map of all parks
+                    echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                    include 'map.inc';
+                }
 
             } else if($_GET["select"] == "searchByRating") { // If the search was done by rating
                 $rate = $_GET["rating"]; // get selected rating
@@ -120,9 +149,14 @@ include 'header.inc';
                             echo $e->getMessage();
                         }
                         // fetch all data to be used for both table and map
-                        $data = $query->fetchAll(PDO::FETCH_ASSOC);
-                        include 'resultsTable.inc'; // Echo results
-                        include 'searchMap.inc';
+                        if ($query->rowCount() > 0) {
+                            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                            include 'resultsTable.inc'; // Echo results
+                            include 'searchMap.inc';
+                        } else { // no parks were found, give error message and show a map of all parks
+                            echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
+                            include 'map.inc';
+                        }
 
                     } else { // no parks were found, give error message and show a map of all parks
                         echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
@@ -136,71 +170,58 @@ include 'header.inc';
                         echo $e->getMessage();
                     }
 
-                    $data = $query->fetchAll(PDO::FETCH_ASSOC);
-                    include 'resultsTable.inc'; // Echo results
-
-                    include 'searchMap.inc';
+                    if ($query->rowCount() > 0) {
+                        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+                        include 'resultsTable.inc'; // Echo results
+                        include 'searchMap.inc';
+                    }
                 }
-            }  else { // no parks were found, give error message and show a map of all parks
+            } else { // no parks were found, give error message and show a map of all parks
                 echo "<div style='text-align:center;'>Sorry. No parks were found, try a different search.</div>";
                 include 'map.inc';
             }
         }
+        unset($_GET);
+        $_GET = array();
+        unset($_POST);
+        $_POST = array();
         ?>
         </div>
 
         <!--  Show map of resulting parks  -->
         <div class="map_field" >
             <!-- Get location of user to show parks around them -->
-            <p><button onclick="getLocation()">Show your location!</button></p>
+            <form id="myForm" name="myForm" method="post">
+                <input type="hidden" id="lat" name="lat" value="1"></input>
+                <input type="hidden" id="long" name="long" value="2"></input>
+                <input type="hidden" id="loc" name="loc" value="3"></input>
+            </form>
+            <button onclick="getLatLon()">Show your location!</button>
             <!-- paragraph for errors if any occur -->
             <p id="error"></p>
             <!-- containder for the map  -->
-            <div id="map" ></div>
+            <div id="map" > </div>
+
+            <!--  source for the map using own key for the google map api  -->
+            <?php include "map_source.inc"; ?>
 
             <script>
-            // set map scripts for finding location and showing errors
             var x=document.getElementById("error");
-            function getLocation() {
+            function getLatLon() {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(showPosition,showError);
+                    navigator.geolocation.getCurrentPosition(submitForm,showError);
                 } else {
                     x.innerHTML="Geolocation is not supported by this browser.";
                 }
             }
 
-            // function for getting and showing the users position
-            function showPosition(position) {
+            function submitForm(position) {
                 lat=position.coords.latitude;
                 lon=position.coords.longitude;
-                latlon=new google.maps.LatLng(lat, lon)
-                map=document.getElementById('map')
+                document.getElementById('lat').value = lat;
+                document.getElementById('long').value = lon;
+                document.getElementById('myForm').submit();
 
-                var myOptions = { // map options with bouncing user marker and zoomed view
-                    center:latlon,
-                    zoom:15,
-                    mapTypeId:google.maps.MapTypeId.ROADMAP,
-                    scrollwheel: false,
-                    mapTypeControl:false,
-                    navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
-                };
-                var map=new google.maps.Map(document.getElementById("map"),myOptions);
-                var marker=new google.maps.Marker({position:latlon,animation:google.maps.Animation.BOUNCE,map:map,title:"You are here!"});
-                <?php
-                include 'pdo.inc';
-                $query = $pdo->prepare("SELECT Name, Latitude, Longitude FROM items");
-                try {
-                    $query->execute();
-                } catch (PDOException $e) {
-                    echo $e->getMessage();
-                }
-                while ($row = $query->fetch(PDO::FETCH_ASSOC)) { // show all brisbane parks
-                ?>
-                    newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
-                    var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
-                <?php
-                }
-                ?>
             }
 
             //  check for errors and print appropriate statements

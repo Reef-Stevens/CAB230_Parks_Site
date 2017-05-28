@@ -17,7 +17,7 @@ include 'header.inc';
 	}
 
 	// Query for data of selcted park
-	$query = $pdo->prepare("SELECT Name, Suburb, Street, Latitude, Longitude  FROM dataset WHERE id = :id");
+	$query = $pdo->prepare("SELECT Name, Suburb, Street, Latitude, Longitude  FROM items WHERE id = :id");
 	$query->bindValue(':id', $id);
 	try {
 		$query->execute();
