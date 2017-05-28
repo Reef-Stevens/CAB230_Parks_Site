@@ -32,6 +32,8 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
         }
         // creates map using the options set
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        var marker;
+        var infowindow = new google.maps.InfoWindow();
         <?php
         include 'pdo.inc'; // new pdo for query
         $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Latitude BETWEEN :min_lat AND :max_lat AND Longitude BETWEEN :min_lon AND :max_lon" );
@@ -50,8 +52,18 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
             foreach ($data as $row) {
             ?> // create a marker for each park
                 newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
-                var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
-            <?php
+                marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
+                <?php $id = $row['id']; ?>
+                <?php $name = $row['Name']; ?>
+                // create a link within a popup window for each park
+                var text = "<?php  echo '<h3>Check the park:</h3><a class=\'link\' href=\"result.php?id='.$id.'\">'.$name.'</a>';  ?>";
+                google.maps.event.addListener(marker, 'click', (function(marker,text) {
+                    return function() {
+                    infowindow.setContent(text);
+                    infowindow.open(map, marker);
+                    }
+                })(marker,text));
+                <?php
             }
         }
         ?>

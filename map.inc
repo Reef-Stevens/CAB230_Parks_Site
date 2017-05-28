@@ -22,10 +22,9 @@ function myMap() {
     ?> // create a marker for each park
         newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
         marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
-        // google.maps.event.addListener(marker, 'click', function(marker) {window.location.href = 'result.php?id=235';});
-
         <?php $id = $row['id']; ?>
         <?php $name = $row['Name']; ?>
+        // create a link within a popup window for each park
         var text = "<?php  echo '<h3>Check the park:</h3><a class=\'link\' href=\"result.php?id='.$id.'\">'.$name.'</a>';  ?>";
         google.maps.event.addListener(marker, 'click', (function(marker,text) {
             return function() {
