@@ -1,9 +1,15 @@
 <script>
 // function for showing a map with the queried parks from user search
 function myMap() {
+    <?php
+    foreach ($data as $row) {
+        $lat = $row['Latitude'];
+        $long = $row['Longitude'];
+    }
+    ?>
     var mapOptions = { // map options with no scrolling
-        center: new google.maps.LatLng(-27.477250, 153.028564),
-        zoom: 12,
+        center: new google.maps.LatLng(<?php  echo $lat;  ?>, <?php  echo $long;  ?>),
+        zoom: 13,
         mapTypeId:google.maps.MapTypeId.ROADMAP,
         scrollwheel: false,
         mapTypeControl:false,
@@ -19,5 +25,6 @@ function myMap() {
     <?php
     }
     ?>
+    
 }
 </script><?php

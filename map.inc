@@ -19,11 +19,15 @@ function myMap() {
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     ?> // create a marker for each park
         newlatlon=new google.maps.LatLng(<?php  echo $row['Latitude'];  ?>, <?php  echo $row['Longitude'];  ?>)
-        var marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
+        var marker=new google.maps.Marker({position:newlatlon,url: 'http://www.google.com/',map:map,title:"<?php  echo $row['Name'];  ?>"});
+        google.maps.event.addListener(marker, 'click', function() {
+              window.location.href = 'http://www.google.com/';
+            });
     <?php
     }
     ?>
 }
+
 </script>
 
 <!--  source for the map using own key for the google map api  -->
