@@ -21,7 +21,7 @@
             </select>
         </div>
         <div class="buttons-container">
-            <button type="submit" name="submit" value="yes" class="submitbtn">Submit</button>
+            <button type="submit" name="submit" class="submitbtn">Submit</button>
         </div>
 
     </div>

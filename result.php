@@ -9,11 +9,16 @@ include 'header.inc';
 	include 'pdo.inc'; // create new pdo
 
 	// get id for park clicked on previous page
-	$id = $_GET['id'];
+	if(isset($_GET['id'])){
+		$id = $_GET['id'];
+
 	if ($id == 0) {
 		$id = $_SESSION['id']; // get id from session
 	} else {
 		$_SESSION['id'] = $id; // save id in session
+	}
+	}else {
+		$id = $_SESSION['id']; // get id from session
 	}
 
 	// Query for data of selcted park
@@ -67,9 +72,10 @@ include 'header.inc';
 	<?php
 	// If the user is logged in, they can see a review form and add a review for the park
     if (isset($_SESSION['isAdmin'])) {
-		if (isset($_POST['submit']) && !empty($_POST['review'])) {
-			// get submitted data, the user email from the session and today's date
-			$review = $_POST['review'];
+		if (!empty($_POST['submit']) && !empty($_POST['review'])) {
+			// get submitted data, the user email from the session and today's dat
+
+			$review = htmlspecialchars($_POST['review']);
 			$rating = $_POST['rating'];
 			$email = $_SESSION['email'];
 			$date = date("d/m/Y"); // today's date
