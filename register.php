@@ -14,7 +14,7 @@ function register($name, $pass, $email, $age, $birth) {
     }
 
     if( $stmt->rowCount() > 0 ) { // checks if there is any data found, if so the user is already registered
-        echo '<div class="form_output"><p>Email already registered!</p></div>';
+        echo '<div style="text-align:center;color:red;" class="form_output"><p>Email already registered!</p></div>';
         return False;
     } else { // for new users, it stored all their given data and the hashed password in the server
         $stmt = $pdo->prepare('INSERT INTO members (userName, userPass, userEmail, age, birth) VALUES (:name, SHA2(CONCAT(:pass, "4b3403665fea6"), 0), :email, :age, :birth)');

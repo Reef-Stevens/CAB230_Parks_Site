@@ -55,8 +55,10 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
                 marker=new google.maps.Marker({position:newlatlon,map:map,title:"<?php  echo $row['Name'];  ?>"});
                 <?php $id = $row['id']; ?>
                 <?php $name = $row['Name']; ?>
+                <?php $suburb = $row['Suburb']; ?>
+                <?php $street = $row['Street']; ?>
                 // create a link within a popup window for each park
-                var text = "<?php  echo '<h3>Check the park:</h3><a class=\'link\' href=\"result.php?id='.$id.'\">'.$name.'</a>';  ?>";
+                var text = "<?php  echo '<a class=\'link\' href=\"result.php?id='.$id.'\">'.$name.'</a><p>Street: '.$street.'</p><p>Suburb: '.$suburb.'</p>';  ?>";
                 google.maps.event.addListener(marker, 'click', (function(marker,text) {
                     return function() {
                     infowindow.setContent(text);
@@ -124,7 +126,7 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
             include 'resultsTable.inc'; // Echo results
         } else if (isset($_GET['search'])) { // check what type of search was made, query and show the results in table and map
             if($_GET["select"] == "searchByName" && !empty($_GET['search'])) { // If the search was done by name
-                $search = $_GET['search']; // Users search terms is taken and saved
+                $search = htmlspecialchars($_GET['search']);
                 $query = $pdo->prepare("SELECT id, Name, Suburb, Street, Latitude, Longitude FROM items WHERE Name LIKE ?");
                 try {
                     $query->execute(array("%$search%")); // Execute with wildcards
@@ -237,7 +239,7 @@ if(isset($_POST['lat']) && isset($_POST['long'])){
             <!-- paragraph for errors if any occur -->
             <p id="error"></p>
             <!-- containder for the map  -->
-            <div id="map" > </div>
+            <div alt="Map of brisbane parks with markers" id="map" > </div>
 
             <!--  source for the map using own key for the google map api  -->
             <?php include "map_source.inc"; ?>

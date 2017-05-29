@@ -8,7 +8,7 @@ include 'header.inc';
         <!--         Search and large park background        -->
         <div class="section">
             <!-- div used for the placement of background -->
-            <div class="parkbg">
+            <div class="parkbg" alt="Search button with park background">
                 <div class="search">
                     <!-- Search Button - Sends to search page -->
                     <button onclick="window.location.href='search.php'"class="loginopt">Search for Parks!</button>
@@ -23,7 +23,7 @@ include 'header.inc';
         <div class="section map">
             <div class="map_field" id="GoogleMap">
                 <!--  Google map with park locations mapped  -->
-                <div id="map"></div>
+                <div alt="Map of brisbane parks with markers" id="map"></div>
                 <?php include 'map.inc'; ?>
             </div>
         </div>

@@ -39,7 +39,7 @@ include 'header.inc';
 			<h1><?php  echo $data['Name'];  ?></h1>
 
 			<!--  create map of selected park with a marker  -->
-			<div id="map" style="width:100%;height:500px;background:yellow"></div>
+			<div alt="Map of park" id="map" style="width:100%;height:500px;background:yellow"></div>
 
 			<script> // zoomed in map of individual park with marker
 			function myMap() {
